@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standings — Ethiopian Chess</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .standings-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; margin-top: 1rem; }
+    .standings-table th { text-align: left; color: var(--muted); border-bottom: 2px solid var(--rule); padding: 0.5rem 0.75rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .standings-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(196,184,154,0.35); }
+    .standings-table tr:last-child td { border-bottom: none; }
+    .standings-table tr:nth-child(even) td { background: var(--cream); }
+    .rank-1 td:first-child { color: var(--gold); font-weight: 700; }
+    .player-name { font-weight: 500; }
+    .pts { font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="logo">Ethiopian <span>Chess</span></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../tournaments/index.html">Tournaments</a></li>
+      <li><a href="../articles/index.html">Articles</a></li>
+      <li><a href="index.html" class="active">Standings</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="tag">Leaderboard</div>
+    <h1>Standings</h1>
+    <p>Cumulative points across all tournaments.</p>
+  </div>
+
+  <div class="container content-body">
+
+    <h2>Freestyle Friday — All Time</h2>
+    <div class="section-rule"></div>
+
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Player</th>
+          <th>Events</th>
+          <th>Total Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="rank-1">
+          <td>1</td><td class="player-name">cheaven</td><td>1</td><td class="pts">4</td>
+        </tr>
+        <tr>
+          <td>2</td><td class="player-name">binyamash</td><td>1</td><td class="pts">4</td>
+        </tr>
+        <tr>
+          <td>3</td><td class="player-name">SidAhu</td><td>1</td><td class="pts">3</td>
+        </tr>
+        <tr>
+          <td>4</td><td class="player-name">XROL</td><td>1</td><td class="pts">3</td>
+        </tr>
+        <tr>
+          <td>5</td><td class="player-name">mi11l0o</td><td>1</td><td class="pts">3</td>
+        </tr>
+        <tr>
+          <td>6</td><td class="player-name">kukapuzzle</td><td>1</td><td class="pts">2</td>
+        </tr>
+        <tr>
+          <td>7</td><td class="player-name">Fula_710</td><td>1</td><td class="pts">1</td>
+        </tr>
+        <tr>
+          <td>8</td><td class="player-name">magnus_jr14</td><td>1</td><td class="pts">1</td>
+        </tr>
+        <tr>
+          <td>9</td><td class="player-name">Noah3200</td><td>1</td><td class="pts">0</td>
+        </tr>
+        <tr>
+          <td>10</td><td class="player-name">sasquatchbgf</td><td>1</td><td class="pts">0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:1.5rem; font-size:0.85rem; color:var(--muted); font-style:italic;">Standings update after each tournament. Senterej Cup standings will appear here once the series begins.</p>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-logo">Ethiopian <span>Chess</span></div>
+    <p>Building chess culture in Ethiopia — online and over the board</p>
+    <div class="footer-links">
+      <a href="../index.html">Home</a>
+      <a href="../tournaments/index.html">Tournaments</a>
+      <a href="../articles/index.html">Articles</a>
+      <a href="index.html">Standings</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </footer>
+
+</body>
+</html>
