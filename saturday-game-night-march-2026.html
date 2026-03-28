@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saturday Game Night — Tournament Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --gold: #c8962a;
+    --red: #8b1a1a;
+    --green: #1a5c2a;
+    --rule: #c4b89a;
+    --muted: #7a6e5f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+    border-bottom: 4px solid var(--gold);
+  }
+  .masthead .tournament-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .masthead .subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--rule);
+    margin-bottom: 1.5rem;
+  }
+  .masthead .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .byline-strip {
+    border-top: 1px solid var(--rule);
+    border-bottom: 3px double var(--rule);
+    padding: 0.6rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0 2.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .byline-strip .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline-strip .variant-badge {
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .lede {
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.7;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* STANDINGS */
+  .standings-box {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+  .standings-box h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    min-width: 420px;
+  }
+  .standings-table th {
+    text-align: left;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+  .standings-table td {
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid rgba(196,184,154,0.4);
+  }
+  .standings-table tr:last-child td { border-bottom: none; }
+  .w { color: var(--green); font-weight: 500; }
+  .l { color: var(--red); }
+  .d { color: var(--muted); }
+  .pts { font-weight: 500; }
+
+  /* SECTION */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 2.5rem 0 0.5rem;
+    line-height: 1.2;
+  }
+  .section-rule {
+    width: 3rem;
+    height: 3px;
+    background: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+
+  /* GAME CARDS */
+  .game-card {
+    border: 1px solid var(--rule);
+    margin: 2rem 0;
+    overflow: hidden;
+  }
+  .game-card-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .game-card-header .matchup {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .game-card-header .result-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    text-transform: uppercase;
+  }
+  .badge-white { background: var(--paper); color: var(--ink); }
+  .badge-black { background: var(--gold); color: var(--ink); }
+  .badge-loss { background: var(--red); color: var(--paper); }
+  .game-card-meta {
+    background: var(--cream);
+    padding: 0.5rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .game-card-meta a { color: var(--gold); text-decoration: none; }
+  .game-card-meta a:hover { text-decoration: underline; }
+  .game-card-body { padding: 1.25rem 1.5rem; }
+  .game-card-body p { margin-bottom: 0.9rem; }
+  .game-card-body p:last-child { margin-bottom: 0; }
+
+  .move {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    background: rgba(200,150,42,0.12);
+    border: 1px solid rgba(200,150,42,0.3);
+    padding: 0.1rem 0.35rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .pull-quote {
+    border-left: 4px solid var(--gold);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    background: var(--cream);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .comeback-banner {
+    background: var(--green);
+    color: var(--paper);
+    text-align: center;
+    padding: 1rem;
+    margin: 2rem 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+  .comeback-banner strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+    color: rgba(245,240,232,0.7);
+  }
+
+  .closing {
+    border-top: 3px double var(--rule);
+    padding-top: 2rem;
+    margin-top: 3rem;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  footer {
+    background: var(--ink);
+    color: var(--muted);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  p { margin-bottom: 1rem; }
+
+  /* NAV */
+  .site-nav {
+    background: var(--ink);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-nav .logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .site-nav .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rule);
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    .masthead h1 { font-size: 2.5rem; }
+    .masthead .meta { font-size: 0.55rem; letter-spacing: 0.08em; }
+    .container { padding: 0 1rem; }
+    h2 { font-size: 1.4rem; }
+    .standings-box { padding: 1rem; }
+    .game-card-header { flex-direction: column; align-items: flex-start; }
+    .game-card-meta { flex-direction: column; gap: 0.25rem; }
+    .game-card-body { padding: 1rem; }
+    .pull-quote p { font-size: 1rem; }
+    .lede { font-size: 1rem; }
+    .byline-strip { flex-direction: column; align-items: flex-start; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html" class="logo">Ethiopian <span>Chess</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../tournaments/index.html">Tournaments</a></li>
+    <li><a href="index.html">Articles</a></li>
+    <li><a href="../standings/index.html">Standings</a></li>
+    <li><a href="../about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="masthead">
+  <div class="tournament-tag">Tournament Report · Lichess Swiss</div>
+  <h1>Saturday Game Night</h1>
+  <div class="subtitle">SidAhu silences the doubters — champion in 24 hours</div>
+  <div class="meta">March 28, 2026 &nbsp;·&nbsp; Standard Blitz 3+2 &nbsp;·&nbsp; 6 Rounds &nbsp;·&nbsp; 11 Players</div>
+</div>
+
+<div class="container">
+
+  <div class="byline-strip">
+    <span class="label">Saturday Game Night · Lichess Swiss</span>
+    <span class="variant-badge">Standard</span>
+    <span class="label">6 Rounds · 3+2 Blitz</span>
+  </div>
+
+  <p class="lede">
+    Less than 24 hours after delivering the upset of Freestyle Friday, <strong>SidAhu</strong> returned to the board on Saturday and did something even more remarkable — won the whole tournament. With 4 points from 6 rounds and the highest tiebreak score of 13, SidAhu claimed first place in Saturday Game Night, proving that Friday's heroics were no fluke.
+  </p>
+
+  <!-- STANDINGS -->
+  <div class="standings-box">
+    <h3>Final Standings</h3>
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Player</th><th>Rating</th>
+          <th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R6</th>
+          <th>Pts</th><th>TB</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td><strong>SidAhu</strong></td><td>1834</td>
+          <td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="w">1</td><td class="w">1</td><td class="w">1</td>
+          <td class="pts">4</td><td>13</td>
+        </tr>
+        <tr>
+          <td>2</td><td>sc2222</td><td>1754</td>
+          <td class="l">0</td><td class="w">1</td><td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="w">1</td>
+          <td class="pts">4</td><td>12</td>
+        </tr>
+        <tr>
+          <td>3</td><td>sasquatchbgf</td><td>1969</td>
+          <td class="l">0</td><td class="w">1</td><td class="l">0</td><td class="w">1</td><td class="w">1</td><td class="w">1</td>
+          <td class="pts">4</td><td>11.5</td>
+        </tr>
+        <tr>
+          <td>4</td><td>XROL</td><td>1749</td>
+          <td class="w">1</td><td class="l">0</td><td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="w">1</td>
+          <td class="pts">4</td><td>7.5</td>
+        </tr>
+        <tr>
+          <td>5</td><td>magnus_jr14</td><td>1859</td>
+          <td class="w">1</td><td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="l">0</td>
+          <td class="pts">3</td><td>8</td>
+        </tr>
+        <tr>
+          <td>6</td><td>skatnobel</td><td>1820</td>
+          <td class="d">½</td><td class="d">—</td><td class="w">1</td><td class="l">0</td><td class="w">1</td><td class="l">0</td>
+          <td class="pts">2.5</td><td>6</td>
+        </tr>
+        <tr>
+          <td>7</td><td>FierceGambit</td><td>1817</td>
+          <td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="d">—</td><td class="d">—</td>
+          <td class="pts">2</td><td>4</td>
+        </tr>
+        <tr>
+          <td>8</td><td>Fula_710</td><td>1636</td>
+          <td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="l">0</td><td class="l">0</td><td class="w">1</td>
+          <td class="pts">2</td><td>1</td>
+        </tr>
+        <tr>
+          <td>9</td><td>natanim_21</td><td>1257?</td>
+          <td class="l">0</td><td class="d">—</td><td class="d">—</td><td class="d">—</td><td class="d">—</td><td class="d">—</td>
+          <td class="pts">0</td><td>0</td>
+        </tr>
+        <tr>
+          <td>10</td><td>Bkzgreat</td><td>1850</td>
+          <td class="l">0</td><td class="d">—</td><td class="d">—</td><td class="d">—</td><td class="d">—</td><td class="d">—</td>
+          <td class="pts">0</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- INTRO -->
+  <h2>The Story of the Weekend</h2>
+  <div class="section-rule"></div>
+  <p>Friday night belonged to cheaven — but the most memorable moment was SidAhu's stunning checkmate that toppled the tournament favourite in the final round. Saturday belonged to SidAhu entirely.</p>
+  <p>This was standard chess — no random starting positions, no Chess960 surprises. Just theory, preparation, and nerve. And SidAhu had all three, navigating a rollercoaster six rounds that included two early losses before rattling off four straight wins to claim the title on tiebreak.</p>
+  <p>Four players finished on 4 points — SidAhu, sc2222, sasquatchbgf, and XROL — making this one of the tightest finishes in the community's young history. Tiebreak separated them all.</p>
+
+  <div class="comeback-banner">
+    <strong>🏆 Champion</strong>
+    "Two losses in the first three rounds. Four wins in a row to close. SidAhu won this tournament the hard way."
+  </div>
+
+  <!-- GAME 1 -->
+  <h2>Round 1 · SidAhu Topples a Higher-Rated Opponent</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">SidAhu (1821) vs sasquatchbgf (1984)</span>
+      <span class="result-badge badge-white">White wins · Resignation</span>
+    </div>
+    <div class="game-card-meta">
+      <span>French Defense: Exchange Variation · 15 moves</span>
+      <a href="https://lichess.org/XQolnheN" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>SidAhu opened with the French Exchange and the game was level through the first ten moves — a symmetrical structure with both sides developing naturally. Then on move 11, sasquatchbgf played <span class="move">cxd4??</span> instead of the necessary <span class="move">Re8</span>, handing SidAhu a near-winning +4.96 advantage in one move.</p>
+      <p>SidAhu pounced immediately with <span class="move">Nxd7</span>, winning a piece. When sasquatchbgf recaptured with <span class="move">dxc3?!</span> instead of the better <span class="move">Qxd7</span>, SidAhu replied with the crushing <span class="move">Nxf6+ gxf6</span>, ripping open the kingside. The position was now a forced mate in 6 — and though SidAhu momentarily let it slip with <span class="move">Bh6??</span>, sasquatchbgf walked straight back into it with <span class="move">cxb2??</span>, allowing <span class="move">Qg4+</span> with inevitable checkmate. Resignation on move 15.</p>
+      <p>A clinical opening win against an opponent rated 163 points higher — the perfect start.</p>
+    </div>
+  </div>
+
+  <!-- GAME 2 -->
+  <h2>Round 2 · FierceGambit Strikes Back</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">FierceGambit (1837) vs SidAhu (1831)</span>
+      <span class="result-badge badge-loss">Black resigns · White wins</span>
+    </div>
+    <div class="game-card-meta">
+      <span>Indian Defense · 25 moves</span>
+      <a href="https://lichess.org/omIhBsL7" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>FierceGambit came out swinging with an aggressive Indian Defense setup, playing <span class="move">Qg4</span> early to pressure the kingside. SidAhu tried to castle out of danger but the rook on g8 was already in trouble — <span class="move">5...O-O?!</span> was flagged as an inaccuracy, with <span class="move">Kf8</span> being the safer option.</p>
+      <p>FierceGambit built a suffocating position over the next ten moves, deploying bishop to h6, knight to g5, and launching a central pawn storm with d5. By move 17, the evaluation stood at +5.38 for White — a technically won game. The finish was emphatic: <span class="move">Bxf7+</span> forced a rook recapture, <span class="move">hxg6</span> tore open the h-file, and <span class="move">Bf6</span> set up an unstoppable mating net. SidAhu resigned on move 25 with checkmate just moves away.</p>
+    </div>
+  </div>
+
+  <!-- GAME 3 -->
+  <h2>Round 3 · A Costly Blunder Hands skatnobel the Point</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">SidAhu (1825) vs skatnobel (1824)</span>
+      <span class="result-badge badge-loss">White resigns · Black wins</span>
+    </div>
+    <div class="game-card-meta">
+      <span>Sicilian Defense: Nyezhmetdinov-Rossolimo Attack · 31 moves</span>
+      <a href="https://lichess.org/SrRjw73v" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>The most pivotal moment of SidAhu's tournament — and the low point. Playing the Rossolimo against a nearly identically rated opponent, SidAhu held a slight edge through the opening before a critical blunder on move 13 changed everything.</p>
+      <p><span class="move">Ne5+??</span> — giving up the queen for a rook — swung the evaluation from +0.62 to -4.21 in a single move. After <span class="move">13...Qxe5 14. Rxe5 Nxg4</span>, skatnobel had won the queen and the game was effectively over. SidAhu fought on for 18 more moves before resigning, but the position was never recoverable.</p>
+      <p>Two losses from three rounds. For most players, the tournament would be over mentally. Not SidAhu.</p>
+    </div>
+  </div>
+
+  <!-- GAME 4 -->
+  <h2>Round 4 · The Comeback Begins</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">Fula_710 (1647) vs SidAhu (1818)</span>
+      <span class="result-badge badge-black">Black wins · Resignation</span>
+    </div>
+    <div class="game-card-meta">
+      <span>Sicilian Defense: Löwenthal Variation · 27 moves</span>
+      <a href="https://lichess.org/Ze1xqjRB" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>Needing a response after two consecutive losses, SidAhu played a composed Sicilian Löwenthal and kept the game balanced through the opening. Fula_710 tried an ambitious queenside castle with <span class="move">O-O-O</span> but a critical blunder on move 15 — <span class="move">Rb5??</span> instead of the necessary <span class="move">a3</span> — left the queen en prise.</p>
+      <p>SidAhu took it immediately with <span class="move">15...Qxc4</span>, winning a queen for a rook. From that point it was technique: a bishop pair, a passed pawn, and relentless pressure along the open files. After <span class="move">27...Bd4+</span> — a devastating check with no good response — Fula_710 resigned. The comeback was on.</p>
+    </div>
+  </div>
+
+  <!-- GAME 5 -->
+  <h2>Round 5 · magnus_jr14 Runs Out of Time</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">magnus_jr14 (1870) vs SidAhu (1822)</span>
+      <span class="result-badge badge-black">Black wins · Time forfeit</span>
+    </div>
+    <div class="game-card-meta">
+      <span>Pirc Defense · 12 moves</span>
+      <a href="https://lichess.org/Nhfvcgb8" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>The shortest game of the tournament — and one of the more unusual results. SidAhu played the Pirc Defense and the position was slightly worse for Black through the early moves, with magnus_jr14 building an Austrian Attack setup with f4 and e5.</p>
+      <p>But on move 10, magnus_jr14 played <span class="move">Ne4?!</span> instead of the sharper <span class="move">Nxd5</span>, letting SidAhu equalize. After <span class="move">12...Ne3</span> — a strong centralizing move — magnus_jr14 ran out of time. The position was still alive and contested, but the clock had the final say.</p>
+      <p>Three straight wins now. One more needed.</p>
+    </div>
+  </div>
+
+  <!-- GAME 6 -->
+  <h2>Round 6 · A Champion's Finish</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">SidAhu (1829) vs sc2222 (1759)</span>
+      <span class="result-badge badge-white">White wins · Checkmate</span>
+    </div>
+    <div class="game-card-meta">
+      <span>French Defense: Exchange Variation · 29 moves</span>
+      <a href="https://lichess.org/B4iNpSVX" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>The final round. SidAhu needed a win to claim first place on tiebreak — and delivered one in style. Back to the French Exchange, the same opening that won Round 1, SidAhu built a methodical middlegame before a sharp tactical sequence decided everything.</p>
+      <p>The game was level for much of the middlegame, with both sides making inaccuracies. Then on move 27, sc2222 played <span class="move">gxh6??</span> — declining to take the queen with <span class="move">Qxb2</span> — and walked into a forced mate in 2. SidAhu played <span class="move">28. Nxh6+ Kh8</span> and delivered <span class="move">29. Rh7#</span> — a beautiful rook checkmate with the king trapped in the corner.</p>
+
+      <div class="pull-quote">
+        <p>"Rh7# — a rook slides to the seventh rank and the king has nowhere to go. The perfect ending to a perfect comeback."</p>
+      </div>
+
+      <p>Four wins from the final four rounds. First place on tiebreak. SidAhu had done it.</p>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <h2>Final Thoughts</h2>
+  <div class="section-rule"></div>
+  <p>SidAhu's weekend was extraordinary by any measure. Friday night: a stunning upset against cheaven that shook the tournament. Saturday: two early losses, then four consecutive wins including a checkmate in the final round to take first place on tiebreak.</p>
+  <p>The ability to recover from adversity — to lose two straight and still win the tournament — is what separates good players from great ones. SidAhu showed that quality in abundance this weekend.</p>
+  <p>sc2222 and sasquatchbgf both deserve credit for finishing level on points. A tighter tiebreak and either could have been champion. XROL, who also finished on 4 points, continues to be a consistent presence at the top of the field.</p>
+  <p>The community is growing. The competition is intensifying. And if this weekend is any indication, Saturday Game Night is going to be must-watch chess.</p>
+
+  <div class="closing">
+    <p>Games analyzed with Lichess computer evaluation. All six games are available at the links above. Saturday Game Night is a weekly standard chess Swiss event on Lichess — next Saturday, new battles begin.</p>
+  </div>
+
+</div>
+
+<footer>
+  Saturday Game Night Tournament Report · Lichess Swiss · March 28, 2026 ·
+  <a href="https://lichess.org/swiss/5M82UcVj" target="_blank">View Tournament ↗</a>
+</footer>
+
+</body>
+</html>
