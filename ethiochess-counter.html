@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #3a8a4a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+  }
+
+  .wrap {
+    width: 100%;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .line {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  .number {
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 7vw, 4rem);
+    color: #ffffff;
+    display: inline-block;
+  }
+
+  .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="line">
+    <span class="number" id="count">0</span> Members and Counting
+  </div>
+  <div class="sub">EthioChess · Growing Every Week</div>
+</div>
+
+<script>
+const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4QJUA-pMinprBZrmbwzHgRfj2bTgx-e9d5L5_HNVvmz0YSvQJ9Xbtolqd-ofUL6X0ljU2iMuai5Ed/pub?gid=920937340&single=true&output=csv';
+
+function animate(el, target) {
+  if (target === 0) { el.textContent = '0'; return; }
+  let current = 0;
+  const step = target / (1500 / 16);
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      el.textContent = target;
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(current);
+    }
+  }, 16);
+}
+
+async function load() {
+  try {
+    const res = await fetch(CSV + '&t=' + Date.now());
+    const text = await res.text();
+    const rows = text.trim().split('\n').filter(r => r.trim() !== '');
+    const count = Math.max(0, rows.length - 1);
+    animate(document.getElementById('count'), count);
+  } catch (e) {
+    document.getElementById('count').textContent = '?';
+  }
+}
+
+load();
+</script>
+
+</body>
+</html>
