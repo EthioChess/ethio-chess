@@ -145,17 +145,16 @@
     font-weight: 500;
   }
   .h2h-p1 {
-    background: #ffffff;
-    color: #000;
+    background: #4a7c4a;
+    color: #fff;
     display: flex;
     align-items: center;
     padding: 0 0.5rem;
     min-width: 0;
-    border: 1px solid #ccc;
     transition: width 0.5s ease;
   }
   .h2h-draw {
-    background: #6b6b6b;
+    background: #6b3a3a;
     color: #fff;
     display: flex;
     align-items: center;
@@ -165,7 +164,7 @@
     transition: width 0.5s ease;
   }
   .h2h-p2 {
-    background: #3a3a3a;
+    background: #3a1a1a;
     color: #fff;
     display: flex;
     align-items: center;
@@ -609,8 +608,18 @@ function renderResults(p1, p2) {
     if (g.winner === 'white') { resultText = '1-0'; resultClass = 'result-w'; }
     else if (g.winner === 'black') { resultText = '0-1'; resultClass = 'result-b'; }
 
-    // First two moves for preview
-    const movePreview = g.moves ? g.moves.split(' ').slice(0, 8).join(' ') : '';
+    // Move preview with move numbers e.g. "1. e4 e5 2. Nf3 Nc6"
+    function formatMoves(movesStr) {
+      if (!movesStr) return '';
+      const moves = movesStr.split(' ').slice(0, 8);
+      let result = '';
+      moves.forEach((m, i) => {
+        if (i % 2 === 0) result += `${Math.floor(i/2)+1}. `;
+        result += m + ' ';
+      });
+      return result.trim();
+    }
+    const movePreview = formatMoves(g.moves);
     const openingLine = [movePreview, opening].filter(Boolean).join(' | ');
 
     html += `
@@ -653,32 +662,14 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter') searchGames();
 });
 
-// Fetch EthioChess team members from Lichess API
-let communityPlayers = [];
-
-async function loadTeamMembers() {
-  try {
-    const res = await fetch('https://lichess.org/api/team/ethiopian-chess-tournament/users', {
-      headers: { 'Accept': 'application/x-ndjson' }
-    });
-    const text = await res.text();
-    const lines = text.trim().split('\n').filter(l => l.trim());
-    communityPlayers = lines.map(l => {
-      try { return JSON.parse(l).username; } catch { return null; }
-    }).filter(Boolean);
-  } catch (e) {
-    // Fallback to known players if API fails
-    communityPlayers = [
-      'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
-      'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
-      'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
-      'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop'
-    ];
-  }
-}
-
-// Load team members on page load
-loadTeamMembers();
+// EthioChess community players — hardcoded for reliability in iframe
+const communityPlayers = [
+  'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
+  'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
+  'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
+  'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop',
+  'yosephkifle', 'ariesop'
+];
 
 // Close autocomplete when clicking outside
 document.addEventListener('click', e => {
