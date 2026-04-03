@@ -358,26 +358,27 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--paper);
-    border: 1px solid var(--gold);
+    background: #fff;
+    border: 1px solid #999;
     border-top: none;
-    z-index: 100;
-    max-height: 180px;
+    z-index: 9999;
+    max-height: 200px;
     overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
   .autocomplete-item {
-    
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     padding: 0.5rem 0.75rem;
     cursor: pointer;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    background: #fff;
+    color: #1a1410;
   }
-  .autocomplete-item:hover { background: var(--cream); }
+  .autocomplete-item:hover { background: #f0ece4; }
   .autocomplete-item .ac-name { font-weight: 500; }
-  .autocomplete-item .ac-rating { color: var(--muted); font-size: 0.65rem; }
 </style>
 
 <div class="header">
@@ -628,6 +629,17 @@ function renderResults(p1, p2) {
     const bottomPlayer = p1isWhite ? black : white;
     const bottomRating = p1isWhite ? blackRating : whiteRating;
 
+    // Result always from P1's perspective — top row is always P1
+    let p1result = '½-½';
+    let p1class = 'result-d';
+    if (g.winner === 'white') {
+      p1result = p1isWhite ? '1-0' : '0-1';
+      p1class = p1isWhite ? 'result-w' : 'result-b';
+    } else if (g.winner === 'black') {
+      p1result = p1isWhite ? '0-1' : '1-0';
+      p1class = p1isWhite ? 'result-b' : 'result-w';
+    }
+
     html += `
       <tr>
         <td class="players-cell">
@@ -635,7 +647,7 @@ function renderResults(p1, p2) {
           <div class="player-row"><span class="player-name">${bottomPlayer}</span>${bottomRating ? `<span class="player-rating">(${bottomRating})</span>` : ''}</div>
           ${openingLine ? `<div class="opening-line">${openingLine.length > 80 ? openingLine.substring(0, 80) + '…' : openingLine}</div>` : ''}
         </td>
-        <td class="${resultClass} result-cell">${resultText}</td>
+        <td class="${p1class} result-cell">${p1result}</td>
         <td class="moves-cell">${typeof moves === 'number' ? Math.ceil(moves / 2) : moves}</td>
         <td class="year-cell">${year}</td>
         <td><a href="https://lichess.org/${g.id}" target="_blank" class="game-link">View ↗</a></td>
@@ -668,14 +680,34 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter') searchGames();
 });
 
-// EthioChess community players — hardcoded for reliability in iframe
-const communityPlayers = [
-  'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
-  'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
-  'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
-  'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop',
-  'yosephkifle', 'ariesop'
-];
+// Fetch EthioChess team members live from Lichess
+let communityPlayers = [];
+
+async function loadTeamMembers() {
+  try {
+    // Use allorigins CORS proxy to bypass iframe restrictions
+    const url = 'https://lichess.org/api/team/ethiopian-chess-tournament/users';
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy);
+    const data = await res.json();
+    const lines = data.contents.trim().split('\n').filter(l => l.trim());
+    communityPlayers = lines.map(l => {
+      try { return JSON.parse(l).username; } catch { return null; }
+    }).filter(Boolean);
+  } catch (e) {
+    // Fallback to known players if fetch fails
+    communityPlayers = [
+      'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
+      'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
+      'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
+      'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop',
+      'yosephkifle'
+    ];
+  }
+}
+
+// Load on page start
+loadTeamMembers();
 
 // Close autocomplete when clicking outside
 document.addEventListener('click', e => {
