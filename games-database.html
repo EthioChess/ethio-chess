@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games Database — EthioChess</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --gold: #c8962a;
+    --rule: #c4b89a;
+    --muted: #7a6e5f;
+    --green: #1a5c2a;
+    --red: #8b1a1a;
+    --border: #d4cfc8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    border-bottom: 4px solid var(--gold);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .header p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* SEARCH FORM */
+  .search-box {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .search-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .form-group label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-group input, .form-group select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    width: 100%;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .search-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.65rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+  }
+  .search-btn:hover { background: var(--gold); color: var(--ink); }
+  .search-btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+  /* RESULTS */
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .results-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .results-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 0.1rem; }
+  .stat-label { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .stat-value { font-weight: 500; font-size: 0.9rem; }
+  .stat-white { color: var(--ink); }
+  .stat-black { color: var(--muted); }
+  .stat-draw { color: var(--gold); }
+
+  /* GAMES TABLE */
+  .games-table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    min-width: 560px;
+  }
+  thead th {
+    text-align: left;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--rule);
+    padding: 0.5rem 0.6rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { color: var(--ink); }
+  tbody td {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid rgba(196,184,154,0.3);
+    vertical-align: middle;
+  }
+  tbody tr:hover td { background: var(--cream); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .result-w { color: var(--green); font-weight: 500; }
+  .result-b { color: var(--red); font-weight: 500; }
+  .result-d { color: var(--gold); font-weight: 500; }
+
+  .game-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.68rem;
+    border-bottom: 1px solid rgba(200,150,42,0.3);
+  }
+  .game-link:hover { border-bottom-color: var(--gold); }
+
+  /* LOADING / EMPTY / ERROR */
+  .status-msg {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .status-msg.error { color: var(--red); }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .page-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .page-btn:hover, .page-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 3px solid var(--gold);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">EthioChess · Lichess</div>
+  <h1>Games Database</h1>
+  <p>Search head-to-head games between players</p>
+</div>
+
+<div class="container">
+
+  <!-- SEARCH FORM -->
+  <div class="search-box">
+    <h2>Search Games</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Player 1 (Lichess username)</label>
+        <input type="text" id="player1" placeholder="e.g. cheaven">
+      </div>
+      <div class="form-group">
+        <label>Player 2 (Lichess username)</label>
+        <input type="text" id="player2" placeholder="e.g. SidAhu">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>From Year</label>
+        <select id="yearFrom">
+          <option value="">Any</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Variant</label>
+        <select id="variant">
+          <option value="">All</option>
+          <option value="chess960">Chess960</option>
+          <option value="standard">Standard</option>
+          <option value="bullet">Bullet</option>
+          <option value="blitz">Blitz</option>
+          <option value="rapid">Rapid</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Max Results</label>
+        <select id="maxResults">
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+    <button class="search-btn" id="searchBtn" onclick="searchGames()">Search Games</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+
+</div>
+
+<footer>
+  EthioChess · Games Database · Powered by <a href="https://lichess.org" target="_blank">Lichess API</a>
+</footer>
+
+<script>
+let allGames = [];
+let currentPage = 1;
+const perPage = 20;
+
+async function searchGames() {
+  const p1 = document.getElementById('player1').value.trim();
+  const p2 = document.getElementById('player2').value.trim();
+  const yearFrom = document.getElementById('yearFrom').value;
+  const variant = document.getElementById('variant').value;
+  const maxResults = document.getElementById('maxResults').value;
+  const btn = document.getElementById('searchBtn');
+  const resultsDiv = document.getElementById('results');
+
+  if (!p1 || !p2) {
+    resultsDiv.innerHTML = '<div class="status-msg error">Please enter both player usernames.</div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Searching...';
+  resultsDiv.innerHTML = '<div class="status-msg">Fetching games from Lichess...</div>';
+
+  try {
+    let url = `https://lichess.org/api/games/user/${p1}?opponent=${p2}&max=${maxResults}&opening=true&pgnInJson=false&tags=true`;
+
+    if (yearFrom) {
+      const since = new Date(`${yearFrom}-01-01`).getTime();
+      url += `&since=${since}`;
+    }
+    if (variant === 'chess960') url += '&variant=chess960';
+    else if (variant === 'standard') url += '&perfType=ultraBullet,bullet,blitz,rapid,classical';
+    else if (variant === 'bullet') url += '&perfType=bullet';
+    else if (variant === 'blitz') url += '&perfType=blitz';
+    else if (variant === 'rapid') url += '&perfType=rapid';
+
+    const response = await fetch(url, {
+      headers: { 'Accept': 'application/x-ndjson' }
+    });
+
+    if (!response.ok) throw new Error('Player not found or API error');
+
+    const text = await response.text();
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    allGames = lines.map(l => JSON.parse(l));
+    currentPage = 1;
+    renderResults(p1, p2);
+
+  } catch (err) {
+    resultsDiv.innerHTML = `<div class="status-msg error">Error: ${err.message}. Check usernames and try again.</div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Search Games';
+}
+
+function renderResults(p1, p2) {
+  const resultsDiv = document.getElementById('results');
+
+  if (allGames.length === 0) {
+    resultsDiv.innerHTML = '<div class="status-msg">No games found between these players.</div>';
+    return;
+  }
+
+  // Stats
+  let p1wins = 0, p2wins = 0, draws = 0;
+  allGames.forEach(g => {
+    const winner = g.winner;
+    if (!winner) { draws++; return; }
+    const p1isWhite = g.players.white.user?.id === p1.toLowerCase();
+    if ((winner === 'white' && p1isWhite) || (winner === 'black' && !p1isWhite)) p1wins++;
+    else p2wins++;
+  });
+
+  // Paginate
+  const start = (currentPage - 1) * perPage;
+  const pageGames = allGames.slice(start, start + perPage);
+  const totalPages = Math.ceil(allGames.length / perPage);
+
+  let html = `
+    <div class="results-header">
+      <h2>${p1} vs ${p2}</h2>
+      <span class="results-count">${allGames.length} game${allGames.length !== 1 ? 's' : ''} found</span>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-label">Total Games</span>
+        <span class="stat-value">${allGames.length}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">${p1} Wins</span>
+        <span class="stat-value stat-white">${p1wins}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">${p2} Wins</span>
+        <span class="stat-value stat-black">${p2wins}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Draws</span>
+        <span class="stat-value stat-draw">${draws}</span>
+      </div>
+    </div>
+
+    <div class="games-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>White</th>
+          <th>Black</th>
+          <th>Result</th>
+          <th>Opening</th>
+          <th>Type</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  pageGames.forEach((g, i) => {
+    const date = new Date(g.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const white = g.players.white.user?.name || g.players.white.user?.id || '?';
+    const black = g.players.black.user?.name || g.players.black.user?.id || '?';
+    const opening = g.opening?.name || '—';
+    const shortOpening = opening.length > 25 ? opening.substring(0, 25) + '…' : opening;
+    const speed = g.speed || g.perf || '—';
+    const variant = g.variant === 'chess960' ? 'Chess960' : speed.charAt(0).toUpperCase() + speed.slice(1);
+
+    let resultText = '½ - ½';
+    let resultClass = 'result-d';
+    if (g.winner === 'white') { resultText = '1 - 0'; resultClass = 'result-w'; }
+    else if (g.winner === 'black') { resultText = '0 - 1'; resultClass = 'result-b'; }
+    else if (g.status === 'outoftime') { resultText = 'Time'; resultClass = 'result-b'; }
+    else if (g.status === 'resign') { resultText = 'Resign'; }
+
+    html += `
+      <tr>
+        <td>${start + i + 1}</td>
+        <td>${date}</td>
+        <td>${white}</td>
+        <td>${black}</td>
+        <td class="${resultClass}">${resultText}</td>
+        <td title="${opening}">${shortOpening}</td>
+        <td>${variant}</td>
+        <td><a href="https://lichess.org/${g.id}" target="_blank" class="game-link">View ↗</a></td>
+      </tr>
+    `;
+  });
+
+  html += '</tbody></table></div>';
+
+  // Pagination
+  if (totalPages > 1) {
+    html += '<div class="pagination">';
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i}, '${p1}', '${p2}')">${i}</button>`;
+    }
+    html += '</div>';
+  }
+
+  resultsDiv.innerHTML = html;
+}
+
+function goToPage(page, p1, p2) {
+  currentPage = page;
+  renderResults(p1, p2);
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Allow Enter key to search
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchGames();
+});
+</script>
+
+</body>
+</html>
