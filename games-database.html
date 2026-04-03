@@ -274,6 +274,35 @@
 </head>
 <body>
 
+<style>
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border: 1px solid var(--gold);
+    border-top: none;
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .autocomplete-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .autocomplete-item:hover { background: var(--cream); }
+  .autocomplete-item .ac-name { font-weight: 500; }
+  .autocomplete-item .ac-rating { color: var(--muted); font-size: 0.65rem; }
+</style>
+
 <div class="header">
   <div class="tag">EthioChess · Lichess</div>
   <h1>Games Database</h1>
@@ -288,11 +317,17 @@
     <div class="form-grid">
       <div class="form-group">
         <label>Player 1 (Lichess username)</label>
-        <input type="text" id="player1" placeholder="e.g. cheaven">
+        <div class="autocomplete-wrap">
+          <input type="text" id="player1" placeholder="e.g. cheaven" autocomplete="off" oninput="autocomplete(this, 'ac1')">
+          <div class="autocomplete-list" id="ac1" style="display:none;"></div>
+        </div>
       </div>
       <div class="form-group">
         <label>Player 2 (Lichess username)</label>
-        <input type="text" id="player2" placeholder="e.g. SidAhu">
+        <div class="autocomplete-wrap">
+          <input type="text" id="player2" placeholder="e.g. SidAhu" autocomplete="off" oninput="autocomplete(this, 'ac2')">
+          <div class="autocomplete-list" id="ac2" style="display:none;"></div>
+        </div>
       </div>
     </div>
     <div class="form-row">
@@ -537,6 +572,46 @@ function goToPage(page, p1, p2) {
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter') searchGames();
 });
+
+// Close autocomplete when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.autocomplete-wrap')) {
+    document.querySelectorAll('.autocomplete-list').forEach(el => el.style.display = 'none');
+  }
+});
+
+// Autocomplete
+let acTimers = {};
+async function autocomplete(input, listId) {
+  const val = input.value.trim();
+  const list = document.getElementById(listId);
+  if (val.length < 2) { list.style.display = 'none'; return; }
+
+  clearTimeout(acTimers[listId]);
+  acTimers[listId] = setTimeout(async () => {
+    try {
+      const res = await fetch(`https://lichess.org/api/player/autocomplete?term=${encodeURIComponent(val)}&object=true`);
+      const data = await res.json();
+      const players = data.result || [];
+      if (!players.length) { list.style.display = 'none'; return; }
+
+      list.innerHTML = players.slice(0, 6).map(p => `
+        <div class="autocomplete-item" onclick="selectPlayer('${input.id}', '${listId}', '${p.name || p.id}')">
+          <span class="ac-name">${p.name || p.id}</span>
+          ${p.perfs?.blitz?.rating ? `<span class="ac-rating">Blitz ${p.perfs.blitz.rating}</span>` : ''}
+        </div>
+      `).join('');
+      list.style.display = 'block';
+    } catch (e) {
+      list.style.display = 'none';
+    }
+  }, 300);
+}
+
+function selectPlayer(inputId, listId, name) {
+  document.getElementById(inputId).value = name;
+  document.getElementById(listId).style.display = 'none';
+}
 </script>
 
 </body>
