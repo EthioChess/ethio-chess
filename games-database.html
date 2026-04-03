@@ -133,46 +133,118 @@
   .search-btn:hover { background: var(--gold); color: var(--ink); }
   .search-btn:disabled { background: var(--muted); cursor: not-allowed; }
 
-  /* RESULTS */
-  .results-header {
+  /* H2H BAR */
+  .h2h-bar-wrap { margin-bottom: 1.5rem; }
+  .h2h-bar {
+    display: flex;
+    height: 32px;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  .h2h-p1 {
+    background: #2a4a2a;
+    color: #fff;
     display: flex;
     align-items: center;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-draw {
+    background: #5a5a5a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-p2 {
+    background: #4a2a2a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-labels {
+    display: flex;
     justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+  .h2h-label-mid { color: var(--muted); }
+
+  /* TABLE - chess-reference style */
+  .players-cell { min-width: 200px; }
+  .player-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    line-height: 1.5;
+  }
+  .player-name {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+  .player-rating {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+  .opening-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+    line-height: 1.4;
+  }
+  .result-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .moves-cell, .year-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* RESULTS HEADER */
+  .results-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
-    gap: 0.5rem;
   }
   .results-header h2 {
     font-family: 'Playfair Display', serif;
     font-size: 1.3rem;
     font-weight: 700;
+    margin: 0;
   }
   .results-count {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.05em;
   }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    background: var(--cream);
-    border: 1px solid var(--border);
-    padding: 0.75rem 1rem;
-    margin-bottom: 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-  }
-  .stat-item { display: flex; flex-direction: column; gap: 0.1rem; }
-  .stat-label { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
-  .stat-value { font-weight: 500; font-size: 0.9rem; }
-  .stat-white { color: var(--ink); }
-  .stat-black { color: var(--muted); }
-  .stat-draw { color: var(--gold); }
 
   /* GAMES TABLE */
   .games-table-wrap { overflow-x: auto; }
@@ -479,25 +551,25 @@ function renderResults(p1, p2) {
   let html = `
     <div class="results-header">
       <h2>${p1} vs ${p2}</h2>
-      <span class="results-count">${total} game${total !== 1 ? 's' : ''} found</span>
+      <span class="results-count">Total Games ${total}</span>
     </div>
 
-    <div class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-label">Total Games</span>
-        <span class="stat-value">${total}</span>
+    <div class="h2h-bar-wrap">
+      <div class="h2h-bar">
+        <div class="h2h-p1" style="width:${p1pct}%">
+          ${p1pct > 8 ? `<span>${p1pct}% ${p1}</span>` : ''}
+        </div>
+        <div class="h2h-draw" style="width:${dpct}%">
+          ${dpct > 5 ? `<span>${dpct}% Draw</span>` : ''}
+        </div>
+        <div class="h2h-p2" style="width:${p2pct}%">
+          ${p2pct > 8 ? `<span>${p2pct}% ${p2}</span>` : ''}
+        </div>
       </div>
-      <div class="stat-item">
-        <span class="stat-label">${p1} Wins</span>
-        <span class="stat-value stat-white">${p1wins} <span style="font-size:0.7rem;color:var(--muted)">(${p1pct}%)</span></span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">${p2} Wins</span>
-        <span class="stat-value stat-black">${p2wins} <span style="font-size:0.7rem;color:var(--muted)">(${p2pct}%)</span></span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Draws</span>
-        <span class="stat-value stat-draw">${draws} <span style="font-size:0.7rem;color:var(--muted)">(${dpct}%)</span></span>
+      <div class="h2h-labels">
+        <span class="h2h-label-left">${p1}: ${p1wins} win${p1wins !== 1 ? 's' : ''}</span>
+        <span class="h2h-label-mid">${draws} draw${draws !== 1 ? 's' : ''}</span>
+        <span class="h2h-label-right">${p2}: ${p2wins} win${p2wins !== 1 ? 's' : ''}</span>
       </div>
     </div>
 
@@ -505,13 +577,10 @@ function renderResults(p1, p2) {
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Date</th>
-          <th>White</th>
-          <th>Black</th>
+          <th>Players</th>
           <th>Result</th>
-          <th>Opening</th>
-          <th>Type</th>
+          <th>Moves</th>
+          <th>Year</th>
           <th>Link</th>
         </tr>
       </thead>
@@ -519,30 +588,35 @@ function renderResults(p1, p2) {
   `;
 
   pageGames.forEach((g, i) => {
-    const date = new Date(g.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const year = new Date(g.createdAt).getFullYear();
     const white = g.players.white.user?.name || g.players.white.user?.id || '?';
     const black = g.players.black.user?.name || g.players.black.user?.id || '?';
-    const opening = g.opening?.name || '—';
-    const shortOpening = opening.length > 25 ? opening.substring(0, 25) + '…' : opening;
-    const speed = g.speed || g.perf || '—';
-    const variant = g.variant === 'chess960' ? 'Chess960' : speed.charAt(0).toUpperCase() + speed.slice(1);
+    const whiteRating = g.players.white.rating || '';
+    const blackRating = g.players.black.rating || '';
+    const opening = g.opening?.name || '';
+    const moves = g.moves ? g.moves.split(' ').length : (g.lastMoveAt ? '—' : '—');
+    const speed = g.speed || g.perf || '';
+    const variantLabel = g.variant === 'chess960' ? 'Chess960' : speed.charAt(0).toUpperCase() + speed.slice(1);
 
-    let resultText = '½ - ½';
+    let resultText = '½-½';
     let resultClass = 'result-d';
-    if (g.winner === 'white') { resultText = '1 - 0'; resultClass = 'result-w'; }
-    else if (g.winner === 'black') { resultText = '0 - 1'; resultClass = 'result-b'; }
-    else if (g.status === 'outoftime') { resultText = 'Time'; resultClass = 'result-b'; }
-    else if (g.status === 'resign') { resultText = 'Resign'; }
+    if (g.winner === 'white') { resultText = '1-0'; resultClass = 'result-w'; }
+    else if (g.winner === 'black') { resultText = '0-1'; resultClass = 'result-b'; }
+
+    // First two moves for preview
+    const movePreview = g.moves ? g.moves.split(' ').slice(0, 8).join(' ') : '';
+    const openingLine = [movePreview, opening].filter(Boolean).join(' | ');
 
     html += `
       <tr>
-        <td>${start + i + 1}</td>
-        <td>${date}</td>
-        <td>${white}</td>
-        <td>${black}</td>
-        <td class="${resultClass}">${resultText}</td>
-        <td title="${opening}">${shortOpening}</td>
-        <td>${variant}</td>
+        <td class="players-cell">
+          <div class="player-row"><span class="player-name">${white}</span>${whiteRating ? `<span class="player-rating">(${whiteRating})</span>` : ''}</div>
+          <div class="player-row"><span class="player-name">${black}</span>${blackRating ? `<span class="player-rating">(${blackRating})</span>` : ''}</div>
+          ${openingLine ? `<div class="opening-line">${openingLine.length > 80 ? openingLine.substring(0, 80) + '…' : openingLine}</div>` : ''}
+        </td>
+        <td class="${resultClass} result-cell">${resultText}</td>
+        <td class="moves-cell">${typeof moves === 'number' ? Math.ceil(moves / 2) : moves}</td>
+        <td class="year-cell">${year}</td>
         <td><a href="https://lichess.org/${g.id}" target="_blank" class="game-link">View ↗</a></td>
       </tr>
     `;
