@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Games Database — EthioChess</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1a1410;
@@ -193,35 +193,38 @@
     line-height: 1.5;
   }
   .player-name {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 400;
-    font-size: 0.88rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
     color: var(--ink);
   }
   .player-rating {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.78rem;
     color: var(--muted);
+    font-weight: 400;
   }
   .opening-line {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
     color: var(--muted);
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
     line-height: 1.4;
+    font-weight: 400;
   }
   .result-cell {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 0.85rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
     white-space: nowrap;
     text-align: center;
   }
   .moves-cell, .year-cell {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.82rem;
     color: var(--muted);
     text-align: center;
+    font-weight: 400;
   }
 
   /* RESULTS HEADER */
@@ -257,8 +260,10 @@
   }
   thead th {
     text-align: left;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--muted);
     border-bottom: 2px solid var(--rule);
