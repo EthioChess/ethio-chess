@@ -573,6 +573,33 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter') searchGames();
 });
 
+// Fetch EthioChess team members from Lichess API
+let communityPlayers = [];
+
+async function loadTeamMembers() {
+  try {
+    const res = await fetch('https://lichess.org/api/team/ethiopian-chess-tournament/users', {
+      headers: { 'Accept': 'application/x-ndjson' }
+    });
+    const text = await res.text();
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    communityPlayers = lines.map(l => {
+      try { return JSON.parse(l).username; } catch { return null; }
+    }).filter(Boolean);
+  } catch (e) {
+    // Fallback to known players if API fails
+    communityPlayers = [
+      'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
+      'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
+      'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
+      'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop'
+    ];
+  }
+}
+
+// Load team members on page load
+loadTeamMembers();
+
 // Close autocomplete when clicking outside
 document.addEventListener('click', e => {
   if (!e.target.closest('.autocomplete-wrap')) {
@@ -580,32 +607,20 @@ document.addEventListener('click', e => {
   }
 });
 
-// Autocomplete
-let acTimers = {};
-async function autocomplete(input, listId) {
-  const val = input.value.trim();
+function autocomplete(input, listId) {
+  const val = input.value.trim().toLowerCase();
   const list = document.getElementById(listId);
-  if (val.length < 2) { list.style.display = 'none'; return; }
+  if (val.length < 1) { list.style.display = 'none'; return; }
 
-  clearTimeout(acTimers[listId]);
-  acTimers[listId] = setTimeout(async () => {
-    try {
-      const res = await fetch(`https://lichess.org/api/player/autocomplete?term=${encodeURIComponent(val)}&object=true`);
-      const data = await res.json();
-      const players = data.result || [];
-      if (!players.length) { list.style.display = 'none'; return; }
+  const matches = communityPlayers.filter(p => p.toLowerCase().startsWith(val));
+  if (!matches.length) { list.style.display = 'none'; return; }
 
-      list.innerHTML = players.slice(0, 6).map(p => `
-        <div class="autocomplete-item" onclick="selectPlayer('${input.id}', '${listId}', '${p.name || p.id}')">
-          <span class="ac-name">${p.name || p.id}</span>
-          ${p.perfs?.blitz?.rating ? `<span class="ac-rating">Blitz ${p.perfs.blitz.rating}</span>` : ''}
-        </div>
-      `).join('');
-      list.style.display = 'block';
-    } catch (e) {
-      list.style.display = 'none';
-    }
-  }, 300);
+  list.innerHTML = matches.slice(0, 6).map(p => `
+    <div class="autocomplete-item" onclick="selectPlayer('${input.id}', '${listId}', '${p}')">
+      <span class="ac-name">${p}</span>
+    </div>
+  `).join('');
+  list.style.display = 'block';
 }
 
 function selectPlayer(inputId, listId, name) {
