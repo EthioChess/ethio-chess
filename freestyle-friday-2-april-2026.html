@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freestyle Friday #2 — Tournament Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #ffffff;
+    --cream: #f7f4f0;
+    --accent: #1a1410;
+    --gold: #b8860b;
+    --red: #8b1a1a;
+    --green: #1a5c2a;
+    --rule: #d4cfc8;
+    --muted: #8a847c;
+    --border: #e8e4df;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  .site-nav {
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-nav .logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-links { display: none; }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* MASTHEAD */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 3rem 1rem 2.5rem;
+    border-bottom: 4px solid var(--paper);
+  }
+  .masthead .tournament-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .masthead .subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.5rem;
+  }
+  .masthead .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* BYLINE */
+  .byline-strip {
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0 2.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .byline-strip .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline-strip .badge {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* LEDE */
+  .lede {
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.7;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* STANDINGS */
+  .standings-box {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--ink);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+  .standings-box h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    min-width: 420px;
+  }
+  .standings-table th {
+    text-align: left;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.3rem 0.5rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+  .standings-table td {
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .standings-table tr:last-child td { border-bottom: none; }
+  .standings-table .rank-1 td { background: rgba(0,0,0,0.04); font-weight: 500; }
+  .w { color: var(--green); font-weight: 500; }
+  .l { color: var(--red); }
+  .bye { color: var(--muted); font-style: italic; }
+  .pts { font-weight: 700; }
+
+  /* SECTIONS */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 2.5rem 0 0.5rem;
+    line-height: 1.2;
+  }
+  .section-rule {
+    width: 2.5rem;
+    height: 2px;
+    background: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+
+  /* GAME CARDS */
+  .game-card {
+    border: 1px solid var(--border);
+    margin: 2rem 0;
+    overflow: hidden;
+  }
+  .game-card-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .game-card-header .matchup {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .game-card-header .result-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    text-transform: uppercase;
+  }
+  .badge-white { background: #ffffff; color: var(--ink); }
+  .badge-black { background: #c4a44a; color: var(--ink); }
+  .badge-time { background: #4a6c8a; color: #ffffff; }
+  .game-card-meta {
+    background: var(--cream);
+    padding: 0.5rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .game-card-meta a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .game-card-meta a:hover { color: var(--gold); }
+  .game-card-body { padding: 1.25rem 1.5rem; }
+  .game-card-body p { margin-bottom: 0.9rem; }
+  .game-card-body p:last-child { margin-bottom: 0; }
+
+  .move {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.35rem;
+    white-space: nowrap;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--ink);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    background: var(--cream);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* BYE NOTICE */
+  .bye-notice {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    padding: 1rem 1.25rem;
+    margin: 2rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+
+  /* CLOSING */
+  .closing {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    margin-top: 3rem;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+
+  p { margin-bottom: 1rem; }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    .masthead h1 { font-size: 2.5rem; }
+    .container { padding: 0 1rem; }
+    h2 { font-size: 1.4rem; }
+    .game-card-header { flex-direction: column; align-items: flex-start; }
+    .game-card-meta { flex-direction: column; gap: 0.25rem; }
+    .game-card-body { padding: 1rem; }
+    .lede { font-size: 1rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html" class="logo">EthioChess</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="index.html">Articles</a></li>
+    <li><a href="../standings/index.html">Standings</a></li>
+    <li><a href="../about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="masthead">
+  <div class="tournament-tag">Tournament Report · Freestyle Friday #2 · Lichess Swiss</div>
+  <h1>Freestyle Friday #2</h1>
+  <div class="subtitle">magnus_jr14 rises from the bye — three wins, one title</div>
+  <div class="meta">April 3, 2026 &nbsp;·&nbsp; Chess960 Blitz 5+2 &nbsp;·&nbsp; 5 Rounds &nbsp;·&nbsp; 7 Players</div>
+</div>
+
+<div class="container">
+
+  <div class="byline-strip">
+    <span class="label">Freestyle Friday #2 · Lichess Swiss · April 3, 2026</span>
+    <span class="badge">Chess960</span>
+  </div>
+
+  <p class="lede">
+    In the second edition of Freestyle Friday, <strong>magnus_jr14</strong> claimed the title in dramatic fashion — sitting out Round 1 with a bye, losing Round 2, then winning three straight games to finish on 4 points with tiebreak 11. It was the kind of comeback run that Chess960 was made for.
+  </p>
+
+  <!-- STANDINGS -->
+  <div class="standings-box">
+    <h3>Final Standings</h3>
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Player</th><th>Rating</th>
+          <th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th>
+          <th>Pts</th><th>TB</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="rank-1">
+          <td>1</td><td><strong>magnus_jr14</strong></td><td>1615?</td>
+          <td class="bye">bye</td>
+          <td class="l">0</td>
+          <td class="w">1</td>
+          <td class="w">1</td>
+          <td class="w">1</td>
+          <td class="pts">4</td><td>11</td>
+        </tr>
+        <tr>
+          <td>2</td><td>SidAhu</td><td>1620?</td>
+          <td class="w">1</td><td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="l">0</td>
+          <td class="pts">3</td><td>8</td>
+        </tr>
+        <tr>
+          <td>3</td><td>binyamash</td><td>1484?</td>
+          <td class="w">1</td><td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="w">1</td>
+          <td class="pts">3</td><td>7</td>
+        </tr>
+        <tr>
+          <td>4</td><td>XROL</td><td>1595?</td>
+          <td class="l">0</td><td class="w">1</td><td class="w">1</td><td class="w">1</td><td class="l">0</td>
+          <td class="pts">3</td><td>4</td>
+        </tr>
+        <tr>
+          <td>5</td><td>cheaven</td><td>1861?</td>
+          <td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="w">1</td><td class="w">1</td>
+          <td class="pts">3</td><td>4</td>
+        </tr>
+        <tr>
+          <td>6</td><td>Fula_710</td><td>1172?</td>
+          <td class="l">0</td><td class="w">1</td><td class="l">0</td><td class="l">0</td><td class="l">0</td>
+          <td class="pts">1</td><td>1.5</td>
+        </tr>
+        <tr>
+          <td>7</td><td>IZAKHERES</td><td>1500?</td>
+          <td class="l">0</td><td class="l">0</td><td class="bye">—</td><td class="bye">—</td><td class="bye">—</td>
+          <td class="pts">0</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- INTRO -->
+  <h2>The Unusual Road to the Title</h2>
+  <div class="section-rule"></div>
+
+  <p>Seven players. Five rounds. And a champion who earned his first point without moving a piece.</p>
+
+  <p>With an odd number of participants in the opening round, the Swiss pairing system awarded magnus_jr14 a bye — one free point without having to move a piece. It's a quirk of Swiss tournaments that can feel like a gift, but it comes with pressure: you're behind on game experience while everyone else is already in rhythm.</p>
+
+  <p>Round 2 didn't go well. Facing the in-form SidAhu — fresh off winning Saturday Game Night just days earlier — magnus_jr14 fell in a messy Chess960 position. Down to 0 wins from actual games played, the title looked unlikely. What followed was one of the most impressive closing runs in EthioChess history.</p>
+
+  <div class="bye-notice">
+    Round 1 · magnus_jr14 received a bye (1 point) — not paired due to odd number of players
+  </div>
+
+  <!-- GAME 1 -->
+  <h2>Round 2 · SidAhu Strikes First</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">magnus_jr14 (1223) vs SidAhu (1635)</span>
+      <span class="result-badge badge-black">Black wins · Resignation</span>
+    </div>
+    <div class="game-card-meta">
+      <span>SP #809 · Chess960 · 16 moves</span>
+      <a href="https://lichess.org/NCIyCLw9" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>Starting from position 809 — an unusual arrangement with the queen tucked on h8 — magnus_jr14 opened with <span class="move">d4</span> and <span class="move">g4</span>, an aggressive double pawn advance. SidAhu played solidly in response but an early inaccuracy with <span class="move">2...Ne6?!</span> gave White a slight edge that was quickly squandered.</p>
+      <p>The game turned decisively on move 15 when magnus_jr14 played <span class="move">Rg2??</span> — a blunder that dropped a piece to <span class="move">15...Nxg2</span>. The evaluation swung from near-equal to -4.15 in one move. After <span class="move">16...Nxf4</span> winning another piece, magnus_jr14 resigned. A short, sharp lesson from the tournament's most in-form player.</p>
+    </div>
+  </div>
+
+  <!-- GAME 2 -->
+  <h2>Round 3 · The Comeback Begins — cheaven on the Clock</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">cheaven (1922) vs magnus_jr14 (1187)</span>
+      <span class="result-badge badge-time">Black wins · Time forfeit</span>
+    </div>
+    <div class="game-card-meta">
+      <span>SP #858 · Chess960</span>
+      <a href="https://lichess.org/MtBUydaK" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>This was the match on paper that looked most difficult for magnus_jr14 — facing cheaven, the defending Freestyle Friday champion and the highest-rated player in the field at 1922.</p>
+      <p>The result was stark. cheaven — perhaps distracted, perhaps caught off guard by position 858's unusual piece placement — ran out of time without the game producing a recorded result. magnus_jr14 won by time forfeit, claiming a crucial point against the toughest opponent in the bracket.</p>
+      <p>It was the kind of result that changes a tournament. With two points now — bye plus this win — the title was suddenly back in sight.</p>
+    </div>
+  </div>
+
+  <!-- GAME 3 -->
+  <h2>Round 4 · A 62-Move Epic Against binyamash</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">magnus_jr14 (1187) vs binyamash (1549)</span>
+      <span class="result-badge badge-white">White wins · Resignation</span>
+    </div>
+    <div class="game-card-meta">
+      <span>SP #838 · Chess960 · 62 moves</span>
+      <a href="https://lichess.org/Ew5i4rPK" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>The longest and most impressive game of magnus_jr14's tournament run — a 62-move endgame masterclass that showcased real technical ability. Playing White from position 838, magnus_jr14 built up a slow queenside initiative, maneuvering a knight to d5 by move 8 and establishing strong central control.</p>
+      <p>The middlegame was intricate — pieces traded, pawns advanced, rooks activated. By move 31, a rook penetration to e8 signaled the decisive phase. After <span class="move">35. Re7</span> the queen trade simplified into a technical rook and pawn endgame that magnus_jr14 converted with precision.</p>
+      <p>The finale came on move 61 — a passed h-pawn marched all the way to h8, promoting to a queen. After <span class="move">62. Rf8+</span>, binyamash resigned in a hopeless position. It was a mature, controlled performance from a player whose rating didn't do justice to the quality on display.</p>
+
+      <div class="pull-quote">
+        <p>"62 moves. A pawn promotion. A resignation. magnus_jr14 played this endgame like someone twice their rating."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME 4 -->
+  <h2>Round 5 · XROL Falls on the Clock — Title Secured</h2>
+  <div class="section-rule"></div>
+
+  <div class="game-card">
+    <div class="game-card-header">
+      <span class="matchup">XROL (1695) vs magnus_jr14 (1441)</span>
+      <span class="result-badge badge-time">Black wins · Time forfeit</span>
+    </div>
+    <div class="game-card-meta">
+      <span>SP #142 · Chess960 · 21 moves</span>
+      <a href="https://lichess.org/NZpyW2x4" target="_blank">View on Lichess ↗</a>
+    </div>
+    <div class="game-card-body">
+      <p>The final round. Magnus needed a point to clinch — and delivered it in a game where XROL self-destructed from the opening. Position 142 was one of the more unusual configurations of the tournament, with knights on the flanks and bishops in the center.</p>
+      <p>XROL blundered on move 4 with <span class="move">cxb5??</span> — handing away a bishop for a pawn — and the position was already -1.67 for White. What followed was a steady accumulation of disadvantage: <span class="move">4...Bxa2</span> won material, <span class="move">6...Bxb1</span> won the knight, and by move 14 Black was up significantly in material and position.</p>
+      <p>XROL fought on — deploying <span class="move">g4</span>, <span class="move">f5</span>, trying to create kingside chaos — but the material deficit was too great. On move 21, with the position rated -4.3 and no realistic path to recovery, XROL ran out of time. magnus_jr14 was champion.</p>
+    </div>
+  </div>
+
+  <!-- FINAL THOUGHTS -->
+  <h2>Final Thoughts</h2>
+  <div class="section-rule"></div>
+
+  <p>magnus_jr14's title win will raise eyebrows when you look at the rating differential — they were the lowest-rated active player in the field for most of the tournament. But ratings are a snapshot of the past, not a predictor of any single event. On this day, in these positions, magnus_jr14 played the best chess.</p>
+
+  <p>The bye in Round 1 was luck. The comeback after losing Round 2 was character. The 62-move endgame conversion against binyamash was skill. Put them together and you have a worthy champion.</p>
+
+  <p>SidAhu finished second on tiebreak with 3 points — continuing a remarkable run of form that started with Friday's upset win two weeks ago. binyamash and XROL also finished on 3 points, making this one of the most competitive Freestyle Fridays yet. The field is growing stronger every week.</p>
+
+  <div class="closing">
+    <p>Games analyzed with Lichess computer evaluation. All four games are available at the links above. Freestyle Friday returns next week — Chess960, Lichess Swiss, open to all.</p>
+  </div>
+
+</div>
+
+<footer>
+  Freestyle Friday #2 Tournament Report · EthioChess · April 3, 2026 ·
+  <a href="https://lichess.org/swiss/VZTb5V8E" target="_blank">View Tournament ↗</a>
+</footer>
+
+</body>
+</html>
