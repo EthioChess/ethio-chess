@@ -363,34 +363,45 @@ async function searchGames() {
   resultsDiv.innerHTML = '<div class="status-msg">Fetching games from Lichess...</div>';
 
   try {
-    let url = `https://lichess.org/api/games/user/${p1}?opponent=${p2}&max=${maxResults}&opening=true&pgnInJson=false&tags=true`;
+    const p1lower = p1.toLowerCase();
+    const p2lower = p2.toLowerCase();
+
+    // Fetch from both directions and combine
+    let url1 = `https://lichess.org/api/games/user/${p1lower}?opponent=${p2lower}&max=${maxResults}&opening=true&tags=true`;
+    let url2 = `https://lichess.org/api/games/user/${p2lower}?opponent=${p1lower}&max=${maxResults}&opening=true&tags=true`;
 
     if (yearFrom) {
       const since = new Date(`${yearFrom}-01-01`).getTime();
-      url += `&since=${since}`;
+      url1 += `&since=${since}`;
+      url2 += `&since=${since}`;
     }
-    if (variant === 'chess960') url += '&variant=chess960';
-    else if (variant === 'standard') url += '&perfType=ultraBullet,bullet,blitz,rapid,classical';
-    else if (variant === 'bullet') url += '&perfType=bullet';
-    else if (variant === 'blitz') url += '&perfType=blitz';
-    else if (variant === 'rapid') url += '&perfType=rapid';
+    if (variant === 'chess960') { url1 += '&variant=chess960'; url2 += '&variant=chess960'; }
+    else if (variant === 'bullet') { url1 += '&perfType=bullet'; url2 += '&perfType=bullet'; }
+    else if (variant === 'blitz') { url1 += '&perfType=blitz'; url2 += '&perfType=blitz'; }
+    else if (variant === 'rapid') { url1 += '&perfType=rapid'; url2 += '&perfType=rapid'; }
 
-    const response = await fetch(url, {
-      headers: { 'Accept': 'application/x-ndjson' }
-    });
+    const [r1, r2] = await Promise.all([
+      fetch(url1, { headers: { 'Accept': 'application/x-ndjson' } }),
+      fetch(url2, { headers: { 'Accept': 'application/x-ndjson' } })
+    ]);
 
-    if (!response.ok) throw new Error('Player not found or API error');
+    const [t1, t2] = await Promise.all([r1.text(), r2.text()]);
+    const lines1 = t1.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+    const lines2 = t2.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
 
-    const text = await response.text();
-    const lines = text.trim().split('\n').filter(l => l.trim());
-    const p1lower = p1.toLowerCase();
-    const p2lower = p2.toLowerCase();
-    // Filter strictly to only games involving both players
-    allGames = lines.map(l => JSON.parse(l)).filter(g => {
+    // Combine and deduplicate by game ID
+    const seen = new Set();
+    const combined = [...lines1, ...lines2].filter(g => {
+      if (seen.has(g.id)) return false;
+      seen.add(g.id);
+      // Strictly only games between these two players
       const white = g.players?.white?.user?.id?.toLowerCase();
       const black = g.players?.black?.user?.id?.toLowerCase();
       return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
     });
+
+    // Sort by date descending
+    allGames = combined.sort((a, b) => b.createdAt - a.createdAt);
     currentPage = 1;
     renderResults(p1, p2);
 
