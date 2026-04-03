@@ -383,7 +383,14 @@ async function searchGames() {
 
     const text = await response.text();
     const lines = text.trim().split('\n').filter(l => l.trim());
-    allGames = lines.map(l => JSON.parse(l));
+    const p1lower = p1.toLowerCase();
+    const p2lower = p2.toLowerCase();
+    // Filter strictly to only games involving both players
+    allGames = lines.map(l => JSON.parse(l)).filter(g => {
+      const white = g.players?.white?.user?.id?.toLowerCase();
+      const black = g.players?.black?.user?.id?.toLowerCase();
+      return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
+    });
     currentPage = 1;
     renderResults(p1, p2);
 
@@ -405,13 +412,18 @@ function renderResults(p1, p2) {
 
   // Stats
   let p1wins = 0, p2wins = 0, draws = 0;
+  const p1lower = p1.toLowerCase();
   allGames.forEach(g => {
     const winner = g.winner;
     if (!winner) { draws++; return; }
-    const p1isWhite = g.players.white.user?.id === p1.toLowerCase();
+    const p1isWhite = g.players.white.user?.id?.toLowerCase() === p1lower;
     if ((winner === 'white' && p1isWhite) || (winner === 'black' && !p1isWhite)) p1wins++;
     else p2wins++;
   });
+  const total = allGames.length;
+  const p1pct = total ? Math.round((p1wins / total) * 100) : 0;
+  const p2pct = total ? Math.round((p2wins / total) * 100) : 0;
+  const dpct = total ? Math.round((draws / total) * 100) : 0;
 
   // Paginate
   const start = (currentPage - 1) * perPage;
@@ -421,25 +433,25 @@ function renderResults(p1, p2) {
   let html = `
     <div class="results-header">
       <h2>${p1} vs ${p2}</h2>
-      <span class="results-count">${allGames.length} game${allGames.length !== 1 ? 's' : ''} found</span>
+      <span class="results-count">${total} game${total !== 1 ? 's' : ''} found</span>
     </div>
 
     <div class="stats-bar">
       <div class="stat-item">
         <span class="stat-label">Total Games</span>
-        <span class="stat-value">${allGames.length}</span>
+        <span class="stat-value">${total}</span>
       </div>
       <div class="stat-item">
         <span class="stat-label">${p1} Wins</span>
-        <span class="stat-value stat-white">${p1wins}</span>
+        <span class="stat-value stat-white">${p1wins} <span style="font-size:0.7rem;color:var(--muted)">(${p1pct}%)</span></span>
       </div>
       <div class="stat-item">
         <span class="stat-label">${p2} Wins</span>
-        <span class="stat-value stat-black">${p2wins}</span>
+        <span class="stat-value stat-black">${p2wins} <span style="font-size:0.7rem;color:var(--muted)">(${p2pct}%)</span></span>
       </div>
       <div class="stat-item">
         <span class="stat-label">Draws</span>
-        <span class="stat-value stat-draw">${draws}</span>
+        <span class="stat-value stat-draw">${draws} <span style="font-size:0.7rem;color:var(--muted)">(${dpct}%)</span></span>
       </div>
     </div>
 
