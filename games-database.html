@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games Database — EthioChess</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --gold: #c8962a;
+    --rule: #c4b89a;
+    --muted: #7a6e5f;
+    --green: #1a5c2a;
+    --red: #8b1a1a;
+    --border: #d4cfc8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    border-bottom: 4px solid var(--gold);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .header .tag {
+    
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .header h1 {
+    
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .header p {
+    
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* SEARCH FORM */
+  .search-box {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .search-box h2 {
+    
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .form-group label {
+    
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-group input, .form-group select {
+    
+    font-size: 0.82rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    width: 100%;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .search-btn {
+    
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.65rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+  }
+  .search-btn:hover { background: var(--gold); color: var(--ink); }
+  .search-btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+  /* H2H BAR */
+  .h2h-bar-wrap { margin-bottom: 1.5rem; }
+  .h2h-bar {
+    display: flex;
+    height: 32px;
+    width: 100%;
+    overflow: hidden;
+    
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  .h2h-p1 {
+    background: #2a4a2a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-draw {
+    background: #5a5a5a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-p2 {
+    background: #4a2a2a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 0.5rem;
+    min-width: 0;
+    transition: width 0.5s ease;
+  }
+  .h2h-labels {
+    display: flex;
+    justify-content: space-between;
+    
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+  .h2h-label-mid { color: var(--muted); }
+
+  /* TABLE - chess-reference style */
+  .players-cell { min-width: 200px; }
+  .player-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    line-height: 1.5;
+  }
+  .player-name {
+    
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .player-rating {
+    
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .opening-line {
+    
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+    font-weight: 400;
+  }
+  .result-cell {
+    
+    font-weight: 700;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .moves-cell, .year-cell {
+    
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 400;
+  }
+
+  /* RESULTS HEADER */
+  .results-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .results-header h2 {
+    
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .results-count {
+    
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  /* GAMES TABLE */
+  .games-table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    font-size: 0.75rem;
+    min-width: 560px;
+  }
+  thead th {
+    text-align: left;
+    
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--rule);
+    padding: 0.5rem 0.6rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { color: var(--ink); }
+  tbody td {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid rgba(196,184,154,0.3);
+    vertical-align: middle;
+  }
+  tbody tr:hover td { background: var(--cream); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .result-w { color: var(--green); font-weight: 500; }
+  .result-b { color: var(--red); font-weight: 500; }
+  .result-d { color: var(--gold); font-weight: 500; }
+
+  .game-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.68rem;
+    border-bottom: 1px solid rgba(200,150,42,0.3);
+  }
+  .game-link:hover { border-bottom-color: var(--gold); }
+
+  /* LOADING / EMPTY / ERROR */
+  .status-msg {
+    text-align: center;
+    padding: 3rem 1rem;
+    
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .status-msg.error { color: var(--red); }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .page-btn {
+    
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .page-btn:hover, .page-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 3px solid var(--gold);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border: 1px solid var(--gold);
+    border-top: none;
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .autocomplete-item {
+    
+    font-size: 0.78rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .autocomplete-item:hover { background: var(--cream); }
+  .autocomplete-item .ac-name { font-weight: 500; }
+  .autocomplete-item .ac-rating { color: var(--muted); font-size: 0.65rem; }
+</style>
+
+<div class="header">
+  <div class="tag">EthioChess · Lichess</div>
+  <h1>Games Database</h1>
+  <p>Search head-to-head games between players</p>
+</div>
+
+<div class="container">
+
+  <!-- SEARCH FORM -->
+  <div class="search-box">
+    <h2>Search Games</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Player 1 (Lichess username)</label>
+        <div class="autocomplete-wrap">
+          <input type="text" id="player1" placeholder="e.g. cheaven" autocomplete="off" oninput="autocomplete(this, 'ac1')">
+          <div class="autocomplete-list" id="ac1" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Player 2 (Lichess username)</label>
+        <div class="autocomplete-wrap">
+          <input type="text" id="player2" placeholder="e.g. SidAhu" autocomplete="off" oninput="autocomplete(this, 'ac2')">
+          <div class="autocomplete-list" id="ac2" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>From Year</label>
+        <select id="yearFrom">
+          <option value="">Any</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Variant</label>
+        <select id="variant">
+          <option value="">All</option>
+          <option value="chess960">Chess960</option>
+          <option value="standard">Standard</option>
+          <option value="bullet">Bullet</option>
+          <option value="blitz">Blitz</option>
+          <option value="rapid">Rapid</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Max Results</label>
+        <select id="maxResults">
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+    <button class="search-btn" id="searchBtn" onclick="searchGames()">Search Games</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+
+</div>
+
+<footer>
+  EthioChess · Games Database · Powered by <a href="https://lichess.org" target="_blank">Lichess API</a>
+</footer>
+
+<script>
+let allGames = [];
+let currentPage = 1;
+const perPage = 20;
+
+async function searchGames() {
+  const p1 = document.getElementById('player1').value.trim();
+  const p2 = document.getElementById('player2').value.trim();
+  const yearFrom = document.getElementById('yearFrom').value;
+  const variant = document.getElementById('variant').value;
+  const maxResults = document.getElementById('maxResults').value;
+  const btn = document.getElementById('searchBtn');
+  const resultsDiv = document.getElementById('results');
+
+  if (!p1 || !p2) {
+    resultsDiv.innerHTML = '<div class="status-msg error">Please enter both player usernames.</div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Searching...';
+  resultsDiv.innerHTML = '<div class="status-msg">Fetching games from Lichess...</div>';
+
+  try {
+    const p1lower = p1.toLowerCase();
+    const p2lower = p2.toLowerCase();
+
+    // Fetch from both directions and combine
+    let url1 = `https://lichess.org/api/games/user/${p1lower}?opponent=${p2lower}&max=${maxResults}&opening=true&tags=true`;
+    let url2 = `https://lichess.org/api/games/user/${p2lower}?opponent=${p1lower}&max=${maxResults}&opening=true&tags=true`;
+
+    if (yearFrom) {
+      const since = new Date(`${yearFrom}-01-01`).getTime();
+      url1 += `&since=${since}`;
+      url2 += `&since=${since}`;
+    }
+    if (variant === 'chess960') { url1 += '&variant=chess960'; url2 += '&variant=chess960'; }
+    else if (variant === 'bullet') { url1 += '&perfType=bullet'; url2 += '&perfType=bullet'; }
+    else if (variant === 'blitz') { url1 += '&perfType=blitz'; url2 += '&perfType=blitz'; }
+    else if (variant === 'rapid') { url1 += '&perfType=rapid'; url2 += '&perfType=rapid'; }
+
+    const [r1, r2] = await Promise.all([
+      fetch(url1, { headers: { 'Accept': 'application/x-ndjson' } }),
+      fetch(url2, { headers: { 'Accept': 'application/x-ndjson' } })
+    ]);
+
+    const [t1, t2] = await Promise.all([r1.text(), r2.text()]);
+    const lines1 = t1.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+    const lines2 = t2.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+
+    // Combine and deduplicate by game ID
+    const seen = new Set();
+    const combined = [...lines1, ...lines2].filter(g => {
+      if (seen.has(g.id)) return false;
+      seen.add(g.id);
+      // Strictly only games between these two players
+      const white = g.players?.white?.user?.id?.toLowerCase();
+      const black = g.players?.black?.user?.id?.toLowerCase();
+      return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
+    });
+
+    // Sort by date descending
+    allGames = combined.sort((a, b) => b.createdAt - a.createdAt);
+    currentPage = 1;
+    renderResults(p1, p2);
+
+  } catch (err) {
+    resultsDiv.innerHTML = `<div class="status-msg error">Error: ${err.message}. Check usernames and try again.</div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Search Games';
+}
+
+function renderResults(p1, p2) {
+  const resultsDiv = document.getElementById('results');
+
+  if (allGames.length === 0) {
+    resultsDiv.innerHTML = '<div class="status-msg">No games found between these players.</div>';
+    return;
+  }
+
+  // Stats
+  let p1wins = 0, p2wins = 0, draws = 0;
+  const p1lower = p1.toLowerCase();
+  allGames.forEach(g => {
+    const winner = g.winner;
+    if (!winner) { draws++; return; }
+    const p1isWhite = g.players.white.user?.id?.toLowerCase() === p1lower;
+    if ((winner === 'white' && p1isWhite) || (winner === 'black' && !p1isWhite)) p1wins++;
+    else p2wins++;
+  });
+  const total = allGames.length;
+  const p1pct = total ? Math.round((p1wins / total) * 100) : 0;
+  const p2pct = total ? Math.round((p2wins / total) * 100) : 0;
+  const dpct = total ? Math.round((draws / total) * 100) : 0;
+
+  // Paginate
+  const start = (currentPage - 1) * perPage;
+  const pageGames = allGames.slice(start, start + perPage);
+  const totalPages = Math.ceil(allGames.length / perPage);
+
+  let html = `
+    <div class="results-header">
+      <h2>${p1} vs ${p2}</h2>
+      <span class="results-count">Total Games ${total}</span>
+    </div>
+
+    <div class="h2h-bar-wrap">
+      <div class="h2h-bar">
+        <div class="h2h-p1" style="width:${p1pct}%">
+          ${p1pct > 8 ? `<span>${p1pct}% ${p1}</span>` : ''}
+        </div>
+        <div class="h2h-draw" style="width:${dpct}%">
+          ${dpct > 5 ? `<span>${dpct}% Draw</span>` : ''}
+        </div>
+        <div class="h2h-p2" style="width:${p2pct}%">
+          ${p2pct > 8 ? `<span>${p2pct}% ${p2}</span>` : ''}
+        </div>
+      </div>
+      <div class="h2h-labels">
+        <span class="h2h-label-left">${p1}: ${p1wins} win${p1wins !== 1 ? 's' : ''}</span>
+        <span class="h2h-label-mid">${draws} draw${draws !== 1 ? 's' : ''}</span>
+        <span class="h2h-label-right">${p2}: ${p2wins} win${p2wins !== 1 ? 's' : ''}</span>
+      </div>
+    </div>
+
+    <div class="games-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Players</th>
+          <th>Result</th>
+          <th>Moves</th>
+          <th>Year</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  pageGames.forEach((g, i) => {
+    const year = new Date(g.createdAt).getFullYear();
+    const white = g.players.white.user?.name || g.players.white.user?.id || '?';
+    const black = g.players.black.user?.name || g.players.black.user?.id || '?';
+    const whiteRating = g.players.white.rating || '';
+    const blackRating = g.players.black.rating || '';
+    const opening = g.opening?.name || '';
+    const moves = g.moves ? g.moves.split(' ').length : (g.lastMoveAt ? '—' : '—');
+    const speed = g.speed || g.perf || '';
+    const variantLabel = g.variant === 'chess960' ? 'Chess960' : speed.charAt(0).toUpperCase() + speed.slice(1);
+
+    let resultText = '½-½';
+    let resultClass = 'result-d';
+    if (g.winner === 'white') { resultText = '1-0'; resultClass = 'result-w'; }
+    else if (g.winner === 'black') { resultText = '0-1'; resultClass = 'result-b'; }
+
+    // First two moves for preview
+    const movePreview = g.moves ? g.moves.split(' ').slice(0, 8).join(' ') : '';
+    const openingLine = [movePreview, opening].filter(Boolean).join(' | ');
+
+    html += `
+      <tr>
+        <td class="players-cell">
+          <div class="player-row"><span class="player-name">${white}</span>${whiteRating ? `<span class="player-rating">(${whiteRating})</span>` : ''}</div>
+          <div class="player-row"><span class="player-name">${black}</span>${blackRating ? `<span class="player-rating">(${blackRating})</span>` : ''}</div>
+          ${openingLine ? `<div class="opening-line">${openingLine.length > 80 ? openingLine.substring(0, 80) + '…' : openingLine}</div>` : ''}
+        </td>
+        <td class="${resultClass} result-cell">${resultText}</td>
+        <td class="moves-cell">${typeof moves === 'number' ? Math.ceil(moves / 2) : moves}</td>
+        <td class="year-cell">${year}</td>
+        <td><a href="https://lichess.org/${g.id}" target="_blank" class="game-link">View ↗</a></td>
+      </tr>
+    `;
+  });
+
+  html += '</tbody></table></div>';
+
+  // Pagination
+  if (totalPages > 1) {
+    html += '<div class="pagination">';
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i}, '${p1}', '${p2}')">${i}</button>`;
+    }
+    html += '</div>';
+  }
+
+  resultsDiv.innerHTML = html;
+}
+
+function goToPage(page, p1, p2) {
+  currentPage = page;
+  renderResults(p1, p2);
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Allow Enter key to search
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchGames();
+});
+
+// Fetch EthioChess team members from Lichess API
+let communityPlayers = [];
+
+async function loadTeamMembers() {
+  try {
+    const res = await fetch('https://lichess.org/api/team/ethiopian-chess-tournament/users', {
+      headers: { 'Accept': 'application/x-ndjson' }
+    });
+    const text = await res.text();
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    communityPlayers = lines.map(l => {
+      try { return JSON.parse(l).username; } catch { return null; }
+    }).filter(Boolean);
+  } catch (e) {
+    // Fallback to known players if API fails
+    communityPlayers = [
+      'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
+      'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
+      'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
+      'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop'
+    ];
+  }
+}
+
+// Load team members on page load
+loadTeamMembers();
+
+// Close autocomplete when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.autocomplete-wrap')) {
+    document.querySelectorAll('.autocomplete-list').forEach(el => el.style.display = 'none');
+  }
+});
+
+function autocomplete(input, listId) {
+  const val = input.value.trim().toLowerCase();
+  const list = document.getElementById(listId);
+  if (val.length < 1) { list.style.display = 'none'; return; }
+
+  const matches = communityPlayers.filter(p => p.toLowerCase().startsWith(val));
+  if (!matches.length) { list.style.display = 'none'; return; }
+
+  list.innerHTML = matches.slice(0, 6).map(p => `
+    <div class="autocomplete-item" onclick="selectPlayer('${input.id}', '${listId}', '${p}')">
+      <span class="ac-name">${p}</span>
+    </div>
+  `).join('');
+  list.style.display = 'block';
+}
+
+function selectPlayer(inputId, listId, name) {
+  document.getElementById(inputId).value = name;
+  document.getElementById(listId).style.display = 'none';
+}
+</script>
+
+</body>
+</html>
