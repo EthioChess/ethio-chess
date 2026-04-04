@@ -432,9 +432,10 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Max Results</label>
-        <select id="maxResults">
-          <option value="20">20</option>
+        <label>Results Per Page</label>
+        <select id="perPageSelect">
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
           <option value="50">50</option>
           <option value="100">100</option>
         </select>
@@ -455,16 +456,16 @@
 <script>
 let allGames = [];
 let currentPage = 1;
-const perPage = 20;
+let perPage = 20;
 
 async function searchGames() {
   const p1 = document.getElementById('player1').value.trim();
   const p2 = document.getElementById('player2').value.trim();
   const yearFrom = document.getElementById('yearFrom').value;
   const variant = document.getElementById('variant').value;
-  const maxResults = document.getElementById('maxResults').value;
   const btn = document.getElementById('searchBtn');
   const resultsDiv = document.getElementById('results');
+  perPage = parseInt(document.getElementById('perPageSelect').value);
 
   if (!p1) {
     resultsDiv.innerHTML = '<div class="status-msg error">Please enter at least Player 1 username.</div>';
@@ -479,32 +480,53 @@ async function searchGames() {
     const p1lower = p1.toLowerCase();
     const p2lower = p2.toLowerCase();
     const headToHead = p2.length > 0;
+    const sinceMs = yearFrom ? new Date(`${yearFrom}-01-01`).getTime() : null;
 
-    let url = `https://lichess.org/api/games/user/${p1lower}?max=${maxResults}&opening=true&tags=true`;
-    if (headToHead) url += `&opponent=${p2lower}`;
-    if (yearFrom) url += `&since=${new Date(`${yearFrom}-01-01`).getTime()}`;
-    if (variant === 'chess960') url += '&variant=chess960';
-    else if (variant === 'bullet') url += '&perfType=bullet';
-    else if (variant === 'blitz') url += '&perfType=blitz';
-    else if (variant === 'rapid') url += '&perfType=rapid';
+    // Build base URL params
+    function buildParams(user, opponent) {
+      let params = `max=100&opening=true&tags=true`;
+      if (opponent) params += `&opponent=${opponent}`;
+      if (sinceMs) params += `&since=${sinceMs}`;
+      if (variant === 'chess960') params += '&variant=chess960';
+      else if (variant === 'bullet') params += '&perfType=bullet';
+      else if (variant === 'blitz') params += '&perfType=blitz';
+      else if (variant === 'rapid') params += '&perfType=rapid';
+      return `https://lichess.org/api/games/user/${user}?${params}`;
+    }
+
+    // Fetch all pages from one user using `until` cursor
+    async function fetchAll(user, opponent) {
+      let games = [];
+      let until = null;
+      let page = 0;
+      while (true) {
+        let url = buildParams(user, opponent);
+        if (until) url += `&until=${until}`;
+        resultsDiv.innerHTML = `<div class="status-msg">Fetching games... ${games.length} loaded so far</div>`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/x-ndjson' } });
+        const text = await res.text();
+        const batch = text.trim().split('\n').filter(l => l.trim()).map(l => {
+          try { return JSON.parse(l); } catch { return null; }
+        }).filter(Boolean);
+        if (batch.length === 0) break;
+        games = [...games, ...batch];
+        // Get oldest game timestamp for next cursor
+        const oldest = Math.min(...batch.map(g => g.createdAt));
+        if (batch.length < 100) break; // Last page
+        until = oldest - 1;
+        page++;
+        if (page > 50) break; // Safety cap at 5000 games
+      }
+      return games;
+    }
 
     if (headToHead) {
-      let url2 = `https://lichess.org/api/games/user/${p2lower}?opponent=${p1lower}&max=${maxResults}&opening=true&tags=true`;
-      if (yearFrom) url2 += `&since=${new Date(`${yearFrom}-01-01`).getTime()}`;
-      if (variant === 'chess960') url2 += '&variant=chess960';
-      else if (variant === 'bullet') url2 += '&perfType=bullet';
-      else if (variant === 'blitz') url2 += '&perfType=blitz';
-      else if (variant === 'rapid') url2 += '&perfType=rapid';
-
-      const [r1, r2] = await Promise.all([
-        fetch(url, { headers: { 'Accept': 'application/x-ndjson' } }),
-        fetch(url2, { headers: { 'Accept': 'application/x-ndjson' } })
+      const [g1, g2] = await Promise.all([
+        fetchAll(p1lower, p2lower),
+        fetchAll(p2lower, p1lower)
       ]);
-      const [t1, t2] = await Promise.all([r1.text(), r2.text()]);
-      const lines1 = t1.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
-      const lines2 = t2.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
       const seen = new Set();
-      allGames = [...lines1, ...lines2].filter(g => {
+      allGames = [...g1, ...g2].filter(g => {
         if (seen.has(g.id)) return false;
         seen.add(g.id);
         const white = g.players?.white?.user?.id?.toLowerCase();
@@ -512,9 +534,7 @@ async function searchGames() {
         return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
       }).sort((a, b) => b.createdAt - a.createdAt);
     } else {
-      const res = await fetch(url, { headers: { 'Accept': 'application/x-ndjson' } });
-      const text = await res.text();
-      allGames = text.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+      allGames = await fetchAll(p1lower, null);
     }
 
     currentPage = 1;
