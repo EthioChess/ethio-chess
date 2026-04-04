@@ -466,8 +466,8 @@ async function searchGames() {
   const btn = document.getElementById('searchBtn');
   const resultsDiv = document.getElementById('results');
 
-  if (!p1 || !p2) {
-    resultsDiv.innerHTML = '<div class="status-msg error">Please enter both player usernames.</div>';
+  if (!p1) {
+    resultsDiv.innerHTML = '<div class="status-msg error">Please enter at least Player 1 username.</div>';
     return;
   }
 
@@ -478,43 +478,45 @@ async function searchGames() {
   try {
     const p1lower = p1.toLowerCase();
     const p2lower = p2.toLowerCase();
+    const headToHead = p2.length > 0;
 
-    // Fetch from both directions and combine
-    let url1 = `https://lichess.org/api/games/user/${p1lower}?opponent=${p2lower}&max=${maxResults}&opening=true&tags=true`;
-    let url2 = `https://lichess.org/api/games/user/${p2lower}?opponent=${p1lower}&max=${maxResults}&opening=true&tags=true`;
+    let url = `https://lichess.org/api/games/user/${p1lower}?max=${maxResults}&opening=true&tags=true`;
+    if (headToHead) url += `&opponent=${p2lower}`;
+    if (yearFrom) url += `&since=${new Date(`${yearFrom}-01-01`).getTime()}`;
+    if (variant === 'chess960') url += '&variant=chess960';
+    else if (variant === 'bullet') url += '&perfType=bullet';
+    else if (variant === 'blitz') url += '&perfType=blitz';
+    else if (variant === 'rapid') url += '&perfType=rapid';
 
-    if (yearFrom) {
-      const since = new Date(`${yearFrom}-01-01`).getTime();
-      url1 += `&since=${since}`;
-      url2 += `&since=${since}`;
+    if (headToHead) {
+      let url2 = `https://lichess.org/api/games/user/${p2lower}?opponent=${p1lower}&max=${maxResults}&opening=true&tags=true`;
+      if (yearFrom) url2 += `&since=${new Date(`${yearFrom}-01-01`).getTime()}`;
+      if (variant === 'chess960') url2 += '&variant=chess960';
+      else if (variant === 'bullet') url2 += '&perfType=bullet';
+      else if (variant === 'blitz') url2 += '&perfType=blitz';
+      else if (variant === 'rapid') url2 += '&perfType=rapid';
+
+      const [r1, r2] = await Promise.all([
+        fetch(url, { headers: { 'Accept': 'application/x-ndjson' } }),
+        fetch(url2, { headers: { 'Accept': 'application/x-ndjson' } })
+      ]);
+      const [t1, t2] = await Promise.all([r1.text(), r2.text()]);
+      const lines1 = t1.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+      const lines2 = t2.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+      const seen = new Set();
+      allGames = [...lines1, ...lines2].filter(g => {
+        if (seen.has(g.id)) return false;
+        seen.add(g.id);
+        const white = g.players?.white?.user?.id?.toLowerCase();
+        const black = g.players?.black?.user?.id?.toLowerCase();
+        return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
+      }).sort((a, b) => b.createdAt - a.createdAt);
+    } else {
+      const res = await fetch(url, { headers: { 'Accept': 'application/x-ndjson' } });
+      const text = await res.text();
+      allGames = text.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
     }
-    if (variant === 'chess960') { url1 += '&variant=chess960'; url2 += '&variant=chess960'; }
-    else if (variant === 'bullet') { url1 += '&perfType=bullet'; url2 += '&perfType=bullet'; }
-    else if (variant === 'blitz') { url1 += '&perfType=blitz'; url2 += '&perfType=blitz'; }
-    else if (variant === 'rapid') { url1 += '&perfType=rapid'; url2 += '&perfType=rapid'; }
 
-    const [r1, r2] = await Promise.all([
-      fetch(url1, { headers: { 'Accept': 'application/x-ndjson' } }),
-      fetch(url2, { headers: { 'Accept': 'application/x-ndjson' } })
-    ]);
-
-    const [t1, t2] = await Promise.all([r1.text(), r2.text()]);
-    const lines1 = t1.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
-    const lines2 = t2.trim().split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
-
-    // Combine and deduplicate by game ID
-    const seen = new Set();
-    const combined = [...lines1, ...lines2].filter(g => {
-      if (seen.has(g.id)) return false;
-      seen.add(g.id);
-      // Strictly only games between these two players
-      const white = g.players?.white?.user?.id?.toLowerCase();
-      const black = g.players?.black?.user?.id?.toLowerCase();
-      return (white === p1lower && black === p2lower) || (white === p2lower && black === p1lower);
-    });
-
-    // Sort by date descending
-    allGames = combined.sort((a, b) => b.createdAt - a.createdAt);
     currentPage = 1;
     renderResults(p1, p2);
 
