@@ -7,15 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1410;
-    --paper: #f5f0e8;
-    --cream: #ede7d9;
-    --gold: #c8962a;
-    --rule: #c4b89a;
-    --muted: #7a6e5f;
+    --ink: #1a3a1a;
+    --paper: #ffffff;
+    --cream: #f0f5f0;
+    --gold: #2d7a3a;
+    --rule: #a8c8a8;
+    --muted: #5a7a5a;
     --green: #1a5c2a;
     --red: #8b1a1a;
-    --border: #d4cfc8;
+    --border: #c8dcc8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
@@ -30,32 +30,29 @@
 
   /* HEADER */
   .header {
-    background: var(--ink);
-    border-bottom: 4px solid var(--gold);
+    background: #1a5c2a;
+    border-bottom: 4px solid #a8c828;
     padding: 2rem 1.5rem;
     text-align: center;
   }
   .header .tag {
-    
     font-size: 0.65rem;
     letter-spacing: 0.25em;
-    color: var(--gold);
+    color: rgba(255,255,255,0.7);
     text-transform: uppercase;
     margin-bottom: 0.5rem;
   }
   .header h1 {
-    
     font-size: clamp(2rem, 6vw, 3.5rem);
     font-weight: 900;
-    color: var(--paper);
+    color: #ffffff;
     line-height: 1;
     margin-bottom: 0.4rem;
   }
   .header p {
-    
     font-size: 0.65rem;
     letter-spacing: 0.2em;
-    color: var(--muted);
+    color: rgba(255,255,255,0.6);
     text-transform: uppercase;
   }
 
@@ -70,7 +67,7 @@
   .search-box {
     background: var(--cream);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--gold);
+    border-left: 4px solid #1a5c2a;
     padding: 1.5rem;
     margin-bottom: 2rem;
   }
@@ -118,19 +115,18 @@
     margin-bottom: 1rem;
   }
   .search-btn {
-    
     font-size: 0.72rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    background: var(--ink);
-    color: var(--paper);
+    background: #1a5c2a;
+    color: #ffffff;
     border: none;
     padding: 0.65rem 1.5rem;
     cursor: pointer;
     transition: background 0.2s;
     width: 100%;
   }
-  .search-btn:hover { background: var(--gold); color: var(--ink); }
+  .search-btn:hover { background: #2d7a3a; color: #ffffff; }
   .search-btn:disabled { background: var(--muted); cursor: not-allowed; }
 
   /* H2H BAR */
@@ -285,12 +281,12 @@
   .result-d { color: var(--gold); font-weight: 500; }
 
   .game-link {
-    color: var(--gold);
+    color: #1a5c2a;
     text-decoration: none;
     font-size: 0.68rem;
-    border-bottom: 1px solid rgba(200,150,42,0.3);
+    border-bottom: 1px solid rgba(26,92,42,0.3);
   }
-  .game-link:hover { border-bottom-color: var(--gold); }
+  .game-link:hover { border-bottom-color: #1a5c2a; }
 
   /* LOADING / EMPTY / ERROR */
   .status-msg {
@@ -323,25 +319,24 @@
     color: var(--ink);
   }
   .page-btn:hover, .page-btn.active {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
+    background: #1a5c2a;
+    color: #ffffff;
+    border-color: #1a5c2a;
   }
 
   /* FOOTER */
   footer {
-    background: var(--ink);
-    border-top: 3px solid var(--gold);
+    background: #1a5c2a;
+    border-top: 3px solid #a8c828;
     text-align: center;
     padding: 1.5rem;
     margin-top: 3rem;
-    
     font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(255,255,255,0.6);
   }
-  footer a { color: var(--gold); text-decoration: none; }
+  footer a { color: rgba(255,255,255,0.9); text-decoration: none; }
 
   @media (max-width: 600px) {
     .form-grid { grid-template-columns: 1fr; }
