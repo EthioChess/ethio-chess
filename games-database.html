@@ -466,6 +466,7 @@ async function searchGames() {
   const btn = document.getElementById('searchBtn');
   const resultsDiv = document.getElementById('results');
   perPage = parseInt(document.getElementById('perPageSelect').value);
+  saveToURL(p1, p2, yearFrom, variant, perPage);
 
   if (!p1) {
     resultsDiv.innerHTML = '<div class="status-msg error">Please enter at least Player 1 username.</div>';
@@ -715,34 +716,64 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter') searchGames();
 });
 
-// Fetch EthioChess team members live from Lichess
-let communityPlayers = [];
+// Save search params to URL so results persist on refresh
+function saveToURL(p1, p2, year, variant, perPageVal) {
+  const params = new URLSearchParams();
+  if (p1) params.set('p1', p1);
+  if (p2) params.set('p2', p2);
+  if (year) params.set('year', year);
+  if (variant) params.set('variant', variant);
+  if (perPageVal) params.set('perPage', perPageVal);
+  const newUrl = window.location.pathname + '?' + params.toString();
+  window.history.replaceState({}, '', newUrl);
+}
 
-async function loadTeamMembers() {
-  try {
-    // Use allorigins CORS proxy to bypass iframe restrictions
-    const url = 'https://lichess.org/api/team/ethiopian-chess-tournament/users';
-    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy);
-    const data = await res.json();
-    const lines = data.contents.trim().split('\n').filter(l => l.trim());
-    communityPlayers = lines.map(l => {
-      try { return JSON.parse(l).username; } catch { return null; }
-    }).filter(Boolean);
-  } catch (e) {
-    // Fallback to known players if fetch fails
-    communityPlayers = [
-      'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
-      'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
-      'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
-      'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop',
-      'yosephkifle'
-    ];
+// Restore search from URL on page load
+function restoreFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('p1')) {
+    document.getElementById('player1').value = params.get('p1');
+    if (params.get('p2')) document.getElementById('player2').value = params.get('p2');
+    if (params.get('year')) document.getElementById('yearFrom').value = params.get('year');
+    if (params.get('variant')) document.getElementById('variant').value = params.get('variant');
+    if (params.get('perPage')) document.getElementById('perPageSelect').value = params.get('perPage');
+    searchGames();
   }
 }
 
-// Load on page start
-loadTeamMembers();
+// EthioChess team members — try multiple proxies for reliability
+let communityPlayers = [
+  'cheaven', 'SidAhu', 'binyamash', 'XROL', 'mi11l0o',
+  'kukapuzzle', 'Fula_710', 'magnus_jr14', 'Noah3200',
+  'sasquatchbgf', 'IZAKHERES', 'sc2222', 'skatnobel',
+  'FierceGambit', 'natanim_21', 'Bkzgreat', 'ariesop', 'yosephkifle'
+];
+
+async function loadTeamMembers() {
+  const teamUrl = 'https://lichess.org/api/team/ethiopian-chess-tournament/users';
+  const proxies = [
+    `https://api.allorigins.win/get?url=${encodeURIComponent(teamUrl)}`,
+    `https://corsproxy.io/?${encodeURIComponent(teamUrl)}`
+  ];
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy);
+      const data = await res.json();
+      const raw = data.contents || data;
+      const text = typeof raw === 'string' ? raw : JSON.stringify(raw);
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      const players = lines.map(l => {
+        try { return JSON.parse(l).username; } catch { return null; }
+      }).filter(Boolean);
+      if (players.length > 0) {
+        communityPlayers = players;
+        return;
+      }
+    } catch (e) { continue; }
+  }
+}
+
+loadTeamMembers().then(() => restoreFromURL());
 
 // Close autocomplete when clicking outside
 document.addEventListener('click', e => {
@@ -755,11 +786,9 @@ function showSuggestions(input, listId) {
   const val = input.value.trim().toLowerCase();
   const list = document.getElementById(listId);
   if (val.length < 1) { list.style.display = 'none'; return; }
-
   const matches = communityPlayers.filter(p => p.toLowerCase().startsWith(val));
   if (!matches.length) { list.style.display = 'none'; return; }
-
-  list.innerHTML = matches.slice(0, 6).map(p => `
+  list.innerHTML = matches.slice(0, 8).map(p => `
     <div class="autocomplete-item" onclick="selectPlayer('${input.id}', '${listId}', '${p}')">
       <span class="ac-name">${p}</span>
     </div>
