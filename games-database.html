@@ -528,9 +528,10 @@ async function searchGames() {
 
 function renderResults(p1, p2) {
   const resultsDiv = document.getElementById('results');
+  const headToHead = p2.length > 0;
 
   if (allGames.length === 0) {
-    resultsDiv.innerHTML = '<div class="status-msg">No games found between these players.</div>';
+    resultsDiv.innerHTML = '<div class="status-msg">No games found.</div>';
     return;
   }
 
@@ -554,31 +555,39 @@ function renderResults(p1, p2) {
   const pageGames = allGames.slice(start, start + perPage);
   const totalPages = Math.ceil(allGames.length / perPage);
 
-  let html = `
-    <div class="results-header">
-      <h2>${p1} vs ${p2}</h2>
-      <span class="results-count">Total Games ${total}</span>
-    </div>
-
+  const headerTitle = headToHead ? `${p1} vs ${p2}` : `${p1} — All Games`;
+  const barHtml = headToHead ? `
     <div class="h2h-bar-wrap">
       <div class="h2h-bar">
-        <div class="h2h-p1" style="width:${p1pct}%">
-          ${p1pct > 8 ? `<span>${p1pct}% ${p1}</span>` : ''}
-        </div>
-        <div class="h2h-draw" style="width:${dpct}%">
-          ${dpct > 5 ? `<span>${dpct}% Draw</span>` : ''}
-        </div>
-        <div class="h2h-p2" style="width:${p2pct}%">
-          ${p2pct > 8 ? `<span>${p2pct}% ${p2}</span>` : ''}
-        </div>
+        <div class="h2h-p1" style="width:${p1pct}%">${p1pct > 8 ? `<span>${p1pct}% ${p1}</span>` : ''}</div>
+        <div class="h2h-draw" style="width:${dpct}%">${dpct > 5 ? `<span>${dpct}% Draw</span>` : ''}</div>
+        <div class="h2h-p2" style="width:${p2pct}%">${p2pct > 8 ? `<span>${p2pct}% ${p2}</span>` : ''}</div>
       </div>
       <div class="h2h-labels">
         <span class="h2h-label-left">${p1}: ${p1wins} win${p1wins !== 1 ? 's' : ''}</span>
         <span class="h2h-label-mid">${draws} draw${draws !== 1 ? 's' : ''}</span>
         <span class="h2h-label-right">${p2}: ${p2wins} win${p2wins !== 1 ? 's' : ''}</span>
       </div>
-    </div>
+    </div>` : `
+    <div class="h2h-bar-wrap">
+      <div class="h2h-bar">
+        <div class="h2h-p1" style="width:${p1pct}%">${p1pct > 8 ? `<span>${p1pct}% Win</span>` : ''}</div>
+        <div class="h2h-draw" style="width:${dpct}%">${dpct > 5 ? `<span>${dpct}% Draw</span>` : ''}</div>
+        <div class="h2h-p2" style="width:${p2pct}%">${p2pct > 8 ? `<span>${p2pct}% Loss</span>` : ''}</div>
+      </div>
+      <div class="h2h-labels">
+        <span class="h2h-label-left">${p1wins} wins</span>
+        <span class="h2h-label-mid">${draws} draws</span>
+        <span class="h2h-label-right">${p2wins} losses</span>
+      </div>
+    </div>`;
 
+  let html = `
+    <div class="results-header">
+      <h2>${headerTitle}</h2>
+      <span class="results-count">Total Games ${total}</span>
+    </div>
+    ${barHtml}
     <div class="games-table-wrap">
     <table>
       <thead>
@@ -586,7 +595,7 @@ function renderResults(p1, p2) {
           <th>Players</th>
           <th>Result</th>
           <th>Moves</th>
-          <th>Year</th>
+          <th>${headToHead ? 'Year' : 'Date'}</th>
           <th>Link</th>
         </tr>
       </thead>
@@ -594,7 +603,10 @@ function renderResults(p1, p2) {
   `;
 
   pageGames.forEach((g, i) => {
-    const year = new Date(g.createdAt).getFullYear();
+    const dateObj = new Date(g.createdAt);
+    const year = dateObj.getFullYear();
+    const fullDate = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const dateDisplay = headToHead ? year : fullDate;
     const white = g.players.white.user?.name || g.players.white.user?.id || '?';
     const black = g.players.black.user?.name || g.players.black.user?.id || '?';
     const whiteRating = g.players.white.rating || '';
@@ -649,7 +661,7 @@ function renderResults(p1, p2) {
         </td>
         <td class="${p1class} result-cell">${p1result}</td>
         <td class="moves-cell">${typeof moves === 'number' ? Math.ceil(moves / 2) : moves}</td>
-        <td class="year-cell">${year}</td>
+        <td class="year-cell">${dateDisplay}</td>
         <td><a href="https://lichess.org/${g.id}" target="_blank" class="game-link">View ↗</a></td>
       </tr>
     `;
@@ -657,7 +669,6 @@ function renderResults(p1, p2) {
 
   html += '</tbody></table></div>';
 
-  // Pagination
   if (totalPages > 1) {
     html += '<div class="pagination">';
     for (let i = 1; i <= totalPages; i++) {
