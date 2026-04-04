@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1410;
-    --paper: #f5f0e8;
-    --cream: #ede7d9;
-    --gold: #c8962a;
-    --rule: #c4b89a;
-    --muted: #7a6e5f;
+    --ink: #1a3a1a;
+    --paper: #ffffff;
+    --cream: #f0f5f0;
+    --gold: #2d7a3a;
+    --rule: #a8c8a8;
+    --muted: #5a7a5a;
     --green: #1a5c2a;
     --red: #8b1a1a;
   }
@@ -28,8 +28,8 @@
   }
 
   .header {
-    background: var(--ink);
-    border-bottom: 4px solid var(--gold);
+    background: #1a5c2a;
+    border-bottom: 4px solid #a8c828;
     padding: 2rem 1.5rem;
     text-align: center;
   }
@@ -37,7 +37,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.25em;
-    color: var(--gold);
+    color: rgba(255,255,255,0.7);
     text-transform: uppercase;
     margin-bottom: 0.5rem;
   }
@@ -45,7 +45,7 @@
     font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 6vw, 3.5rem);
     font-weight: 900;
-    color: var(--paper);
+    color: #ffffff;
     line-height: 1;
     margin-bottom: 0.4rem;
   }
@@ -53,7 +53,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.2em;
-    color: var(--muted);
+    color: rgba(255,255,255,0.6);
     text-transform: uppercase;
   }
 
@@ -119,8 +119,8 @@
     overflow: hidden;
   }
   .tournament-card-header {
-    background: var(--ink);
-    color: var(--paper);
+    background: #1a5c2a;
+    color: #ffffff;
     padding: 0.75rem 1.25rem;
     display: flex;
     align-items: center;
@@ -137,14 +137,14 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.62rem;
     letter-spacing: 0.1em;
-    color: var(--gold);
+    color: rgba(255,255,255,0.7);
     text-transform: uppercase;
   }
   .tournament-card-header a {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.62rem;
     letter-spacing: 0.1em;
-    color: var(--gold);
+    color: #a8c828;
     text-decoration: none;
     text-transform: uppercase;
   }
@@ -166,17 +166,17 @@
   }
 
   footer {
-    background: var(--ink);
-    border-top: 3px solid var(--gold);
+    background: #1a5c2a;
+    border-top: 3px solid #a8c828;
     text-align: center;
     padding: 1.5rem;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(255,255,255,0.6);
   }
-  footer a { color: var(--gold); text-decoration: none; }
+  footer a { color: rgba(255,255,255,0.9); text-decoration: none; }
 
   @media (max-width: 600px) {
     table { font-size: 0.75rem; }
