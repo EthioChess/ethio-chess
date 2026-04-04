@@ -485,7 +485,7 @@ async function searchGames() {
 
     // Build base URL params
     function buildParams(user, opponent) {
-      let params = `max=100&opening=true&tags=true`;
+      let params = `max=100&opening=true&tags=true&rated=true`;
       if (opponent) params += `&opponent=${opponent}`;
       if (sinceMs) params += `&since=${sinceMs}`;
       if (untilMs) params += `&until=${untilMs}`;
