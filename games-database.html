@@ -484,12 +484,11 @@ async function searchGames() {
     const sinceMs = yearFrom ? new Date(`${yearFrom}-01-01`).getTime() : null;
     const untilMs = yearFrom ? new Date(`${parseInt(yearFrom)+1}-01-01`).getTime() - 1 : null;
 
-    // Build base URL params
+    // Build base URL params — no until here, managed by fetchAll cursor
     function buildParams(user, opponent) {
       let params = `max=100&opening=true&tags=true&rated=true`;
       if (opponent) params += `&opponent=${opponent}`;
       if (sinceMs) params += `&since=${sinceMs}`;
-      if (untilMs) params += `&until=${untilMs}`;
       if (variant === 'chess960') params += '&variant=chess960';
       else if (variant === 'bullet') params += '&perfType=bullet';
       else if (variant === 'blitz') params += '&perfType=blitz';
@@ -497,14 +496,14 @@ async function searchGames() {
       return `https://lichess.org/api/games/user/${user}?${params}`;
     }
 
-    // Fetch all pages from one user using `until` cursor
+    // Fetch all pages using `until` cursor, stopping at sinceMs boundary
     async function fetchAll(user, opponent) {
       let games = [];
-      let until = null;
+      // Start cursor at end of selected year (or now if no year)
+      let until = untilMs || Date.now();
       let page = 0;
       while (true) {
-        let url = buildParams(user, opponent);
-        if (until) url += `&until=${until}`;
+        let url = buildParams(user, opponent) + `&until=${until}`;
         resultsDiv.innerHTML = `<div class="status-msg">Fetching games... ${games.length} loaded so far</div>`;
         const res = await fetch(url, { headers: { 'Accept': 'application/x-ndjson' } });
         const text = await res.text();
@@ -512,10 +511,13 @@ async function searchGames() {
           try { return JSON.parse(l); } catch { return null; }
         }).filter(Boolean);
         if (batch.length === 0) break;
-        games = [...games, ...batch];
-        // Get oldest game timestamp for next cursor
+        // Filter to only games within the year range
+        const filtered = sinceMs ? batch.filter(g => g.createdAt >= sinceMs) : batch;
+        games = [...games, ...filtered];
         const oldest = Math.min(...batch.map(g => g.createdAt));
-        if (batch.length < 100) break; // Last page
+        // Stop if we've gone past the start of selected year
+        if (sinceMs && oldest <= sinceMs) break;
+        if (batch.length < 100) break;
         until = oldest - 1;
         page++;
         if (page > 50) break; // Safety cap at 5000 games
