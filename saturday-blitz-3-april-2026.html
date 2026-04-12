@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saturday Blitz #3: yosephkifle Dominates Record Field — EthioChess</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #0d1f13;
+    --gold: #d4af37;
+    --gold-dim: #8a7020;
+    --green: #1a4a28;
+    --muted: #666;
+    --border: #e0e0e0;
+    --bg: #ffffff;
+    --bg-alt: #f8f9f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: #1a1a1a; font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+
+  .header { background: linear-gradient(160deg, #0a1a0f 0%, #1a3a22 100%); border-bottom: 3px solid var(--gold); padding: 3rem 1.5rem 2.5rem; text-align: center; }
+  .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--gold); line-height: 1.2; max-width: 700px; margin: 0 auto 1rem; }
+  .header-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: #6b7c6e; text-transform: uppercase; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+  p { margin-bottom: 1.4rem; color: #222; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green); margin: 2.5rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 2rem 0 0.5rem; }
+  .lead { font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 1.8rem; line-height: 1.6; }
+
+  .game-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .game-card.draw { border-left-color: #8a6020; }
+  .game-card-left { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+  .game-card-left .players { font-weight: 500; color: #1a1a1a; margin-bottom: 0.2rem; }
+  .game-card-left .opening { color: var(--muted); margin-bottom: 0.2rem; }
+  .game-card-left .result { color: var(--green); font-weight: 500; }
+  .game-card.draw .result { color: #8a6020; }
+  .game-card-right a {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: #fff;
+    background: var(--green);
+    padding: 0.4rem 0.9rem;
+    border-radius: 3px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .game-card-right a:hover { background: #2a6e40; }
+
+  .move { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f0f5f0; color: var(--green); padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+
+  .standings-box { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; padding: 1.2rem 1.5rem; margin: 2rem 0; }
+  .standings-box h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem; border: none; padding: 0; }
+  .standings-box table { width: 100%; border-collapse: collapse; }
+  .standings-box td { padding: 0.3rem 0.5rem; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+  .standings-box tr:last-child td { border-bottom: none; }
+  .standings-box .rank { color: var(--muted); font-family: 'JetBrains Mono', monospace; width: 24px; }
+  .standings-box .pts { font-weight: 600; color: var(--green); font-family: 'JetBrains Mono', monospace; }
+
+  .closing { border-top: 2px solid var(--border); margin-top: 3rem; padding-top: 1.5rem; font-size: 0.88rem; color: var(--muted); font-style: italic; }
+
+  footer { background: var(--ink); border-top: 3px solid var(--gold); text-align: center; padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: #6b7c6e; }
+  footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">EthioChess &middot; Tournament Report &middot; Saturday Blitz</div>
+  <h1>yosephkifle Dominates Record Field in Saturday Blitz #3</h1>
+  <div class="header-meta">April 11, 2026 &nbsp;&middot;&nbsp; Standard 3+2 &nbsp;&middot;&nbsp; 22 Players &nbsp;&middot;&nbsp; 7 Rounds</div>
+</div>
+
+<div class="container">
+
+  <p class="lead">Saturday Blitz #3 made history before a single move was played. Twenty-two players registered &mdash; the largest field in EthioChess history &mdash; a sign of a community that is rapidly growing. The record turnout set the stage for the most competitive event the series has seen. When the dust settled, yosephkifle had made a statement that will echo into the season finale.</p>
+
+  <h2>The Tournament</h2>
+
+  <p>yosephkifle entered the event with a 2307 rating, the highest in the field and a clear target on their back. After receiving a late-join half-point bye in Round 1, they won five of their six games played &mdash; dropping only half a point in a hard-fought draw against CaptainCucumber in Round 5. Opponents ranged from 1763 to 2002 in rating. The final score of 6/7 was decisive and largely uncontested at the top.</p>
+
+  <p>The only blemish on the scorecard was a hard-fought draw against CaptainCucumber in Round 4 &mdash; a 61-move endgame battle that showed yosephkifle can grind as well as they can attack. Every other opponent was dispatched cleanly.</p>
+
+  <p>cheaven, the Freestyle Friday series leader, finished second on 5 points after losing to yosephkifle in the top board clash. SidAhu continued their consistent season with 4.5 points, while kukapuzzle and Shekini rounded out the top five.</p>
+
+  <h2>Game by Game</h2>
+
+  <h3>Round 2 &nbsp;&middot;&nbsp; Noblessse vs yosephkifle &nbsp;&middot;&nbsp; Italian Game: Two Knights Defense</h3>
+
+  <p>yosephkifle opened as Black in the Italian Game and immediately set about exploiting White&rsquo;s early inaccuracies. After Noblessse played <span class="move">6.Bxd5?!</span> &mdash; surrendering the bishop pair for insufficient compensation &mdash; Black built a steady advantage through superior piece coordination. The game grew chaotic in the middlegame with mutual blunders exchanged, but yosephkifle kept their nerve. A pin with <span class="move">24...Bxf3</span> shattered White&rsquo;s pawn structure and the resulting queen activity proved lethal. After <span class="move">31.Rxe5??</span> walked into a forced mate, Black wrapped it up with <span class="move">35...Qxc2#</span> &mdash; a crisp 35-move finish.</p>
+
+  <div class="game-card">
+    <div class="game-card-left">
+      <div class="players">Noblessse (1763) vs yosephkifle (2307)</div>
+      <div class="opening">Italian Game: Two Knights Defense</div>
+      <div class="result">Checkmate &middot; Black wins &middot; 35 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/wqT4TOPn" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h3>Round 3 &nbsp;&middot;&nbsp; yosephkifle vs SidAhu &nbsp;&middot;&nbsp; Sicilian Defense: Rossolimo Attack</h3>
+
+  <p>The fastest and most clinical win of the tournament. yosephkifle opened with the Rossolimo against SidAhu&rsquo;s Sicilian &mdash; a sound anti-Sicilian system that avoids heavy theory. After exchanging the bishop pair early, White was already slightly better. Then SidAhu played <span class="move">11...Qa5??</span> &mdash; missing that White could simply take the rook with <span class="move">12.Qxa8</span>, winning material outright. SidAhu attempted desperate counterplay with <span class="move">12...Qxd2?</span> but resigned on move 12. A merciless 12-move miniature.</p>
+
+  <div class="game-card">
+    <div class="game-card-left">
+      <div class="players">yosephkifle (2307) vs SidAhu (1850)</div>
+      <div class="opening">Sicilian Defense: Nyezhmetdinov-Rossolimo Attack</div>
+      <div class="result">Resigned &middot; White wins &middot; 12 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/X0kcJSka" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h3>Round 4 &nbsp;&middot;&nbsp; yosephkifle vs cheaven &nbsp;&middot;&nbsp; King&rsquo;s Indian Defense: Orthodox Variation</h3>
+
+  <p>The top board clash of the tournament. cheaven, the leading player across both EthioChess weekly series, came in as the most dangerous opponent yosephkifle would face. The King&rsquo;s Indian gave Black dynamic counterplay but White played with precision throughout. The elegant <span class="move">26.Rxc7</span> &mdash; a rook sacrifice to rip open cheaven&rsquo;s queenside &mdash; left Black with no answer. After trading down into a forced queen ending, cheaven resigned on move 30 having watched their position dismantle methodically.</p>
+
+  <div class="game-card">
+    <div class="game-card-left">
+      <div class="players">yosephkifle (2309) vs cheaven (1949)</div>
+      <div class="opening">King&rsquo;s Indian Defense: Orthodox Variation</div>
+      <div class="result">Resigned &middot; White wins &middot; 30 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/NUI6gFgK" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h3>Round 5 &nbsp;&middot;&nbsp; CaptainCucumber vs yosephkifle &nbsp;&middot;&nbsp; Scotch Game: Scotch Gambit</h3>
+
+  <p>The only half-point dropped, and the most absorbing game of the tournament. CaptainCucumber played resourcefully in the Scotch Gambit and the game swung back and forth across 61 moves. After trading queens early and entering a complex rook endgame, yosephkifle had winning chances but couldn&rsquo;t find the breakthrough. CaptainCucumber defended tenaciously and the game ended in threefold repetition &mdash; earning CaptainCucumber the biggest rating gain of the event (+6). Even the best player in the room couldn&rsquo;t break them down.</p>
+
+  <div class="game-card draw">
+    <div class="game-card-left">
+      <div class="players">CaptainCucumber (1954) vs yosephkifle (2310)</div>
+      <div class="opening">Scotch Game: Scotch Gambit, Advance Variation</div>
+      <div class="result">Draw &middot; Threefold repetition &middot; 61 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/01Jk45Mh" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h3>Round 6 &nbsp;&middot;&nbsp; kukapuzzle vs yosephkifle &nbsp;&middot;&nbsp; English Opening: Symmetrical Variation</h3>
+
+  <p>A textbook positional squeeze. yosephkifle took Black in the English and played the Symmetrical &mdash; a solid, modern system. The key sequence came on move 15 when <span class="move">15...Nc2</span> forked the rooks and won material on the spot. After <span class="move">20...Bxe5 21.Bxc6 Bxc7</span> kukapuzzle resigned with no compensation. Clean, principled play from start to finish.</p>
+
+  <div class="game-card">
+    <div class="game-card-left">
+      <div class="players">kukapuzzle (1995) vs yosephkifle (2304)</div>
+      <div class="opening">English Opening: Symmetrical Variation</div>
+      <div class="result">Resigned &middot; Black wins &middot; 21 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/FRldFpoF" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h3>Round 7 &nbsp;&middot;&nbsp; yosephkifle vs Shekini &nbsp;&middot;&nbsp; Italian Game: Two Knights Defense, Modern Bishop&rsquo;s Opening</h3>
+
+  <p>The final and longest game of yosephkifle&rsquo;s run &mdash; a 127-move epic that showed the full depth of their technique. After Shekini blundered a piece on move 19 with <span class="move">19...Nxa5??</span>, yosephkifle spent the next hundred moves methodically converting a winning endgame against stubborn resistance. Three passed pawns were eventually promoted and the king was hunted down in a breathtaking four-queen finish &mdash; <span class="move">127.Qde5#</span>. A fitting end to a dominant performance.</p>
+
+  <div class="game-card">
+    <div class="game-card-left">
+      <div class="players">yosephkifle (2307) vs Shekini (2002)</div>
+      <div class="opening">Italian Game: Two Knights Defense, Modern Bishop&rsquo;s Opening</div>
+      <div class="result">Checkmate &middot; White wins &middot; 127 moves</div>
+    </div>
+    <div class="game-card-right"><a href="https://lichess.org/1NqXUx52" target="_blank">View on Lichess &uarr;</a></div>
+  </div>
+
+  <h2>Season Standings After Round 3</h2>
+
+  <div class="standings-box">
+    <h3>Saturday Blitz &mdash; Cumulative Standings</h3>
+    <table>
+      <tr><td class="rank">1</td><td>SidAhu</td><td class="pts">10.5</td></tr>
+      <tr><td class="rank">2</td><td>XROL</td><td class="pts">9.5</td></tr>
+      <tr><td class="rank">3</td><td>cheaven</td><td class="pts">9</td></tr>
+      <tr><td class="rank">4</td><td>sc2222</td><td class="pts">8</td></tr>
+      <tr><td class="rank">5</td><td>Fula_710</td><td class="pts">7</td></tr>
+      <tr><td class="rank">5</td><td>magnus_jr14</td><td class="pts">7</td></tr>
+      <tr><td class="rank">7</td><td>sasquatchbgf</td><td class="pts">6</td></tr>
+      <tr><td class="rank">8</td><td>yosephkifle</td><td class="pts">6</td></tr>
+    </table>
+  </div>
+
+  <p>SidAhu holds the overall season lead on 10.5 points thanks to consistent finishes across all three events. yosephkifle&rsquo;s debut is a dramatic entry &mdash; their performance rating of 2342 is the highest of any player across the entire series. If they return for Round 4, they will be the player everyone is watching.</p>
+
+  <h2>Final Thoughts</h2>
+
+  <p>Saturday Blitz #3 was the most complete performance the EthioChess weekly series has seen. yosephkifle arrived as the highest-rated player, played with authority against every opponent, and left with a near-perfect score. The lone draw against CaptainCucumber was a reminder that even the strongest player in the room can be made to work for every half-point.</p>
+
+  <p>But the bigger story is the field itself. Twenty-two players. New names alongside the familiar faces who have been building this series from the start. The EthioChess community is growing, and it is growing fast.</p>
+
+  <p>With one round of the regular season remaining before the Season 1 finale, SidAhu holds the lead &mdash; but nothing is decided. Round 4 awaits.</p>
+
+  <div class="closing">
+    <p>Games analyzed with Lichess computer evaluation. All six games are available at the links above. Saturday Blitz returns for its final regular season round next week &mdash; Standard 3+2, Lichess Swiss, open to all.</p>
+  </div>
+
+</div>
+
+<footer>
+  Saturday Blitz #3 Tournament Report &middot; EthioChess &middot; April 11, 2026 &middot;
+  <a href="https://lichess.org/swiss/ypTF1kdR" target="_blank">View Tournament &uarr;</a>
+</footer>
+
+</body>
+</html>
