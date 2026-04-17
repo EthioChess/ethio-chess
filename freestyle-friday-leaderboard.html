@@ -6,159 +6,42 @@
 <title>Freestyle Friday Leaderboard — EthioChess</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
-
   :root {
-    --ink: #0d1f13;
-    --gold: #d4af37;
-    --gold-dim: #8a7020;
-    --green: #1a4a28;
-    --green-bright: #2a6e40;
-    --muted: #888;
-    --win: #1a5c2a;
-    --loss: #8b1a1a;
-    --draw: #7a6200;
-    --bye: #2a4a6a;
-    --border: #ddd;
-    --row-hover: #f7f7f7;
+    --ink: #0d1f13; --gold: #d4af37; --gold-dim: #8a7020;
+    --green: #1a4a28; --muted: #888; --border: #ddd; --row-hover: #f7f7f7;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: #ffffff;
-    color: #1a1a1a;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  /* HEADER stays dark */
-  .header {
-    background: linear-gradient(160deg, #0a1a0f 0%, #1a3a22 100%);
-    border-bottom: 3px solid var(--gold);
-    padding: 2.5rem 1.5rem 2rem;
-    text-align: center;
-  }
-  .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 0.75rem;
-  }
-  .header h1 {
-    font-size: 2.6rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: -0.02em;
-    margin-bottom: 0.4rem;
-  }
-  .header p {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    color: #6b7c6e;
-    text-transform: uppercase;
-  }
-
-  /* BODY content white */
-  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 3rem; }
-
-  .updated {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-transform: uppercase;
-    text-align: right;
-    margin-bottom: 1.5rem;
-  }
-
-  h2 {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 0.5rem;
-  }
-
+  body { background: #fff; color: #1a1a1a; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.5; }
+  .header { background: linear-gradient(160deg, #0a1a0f 0%, #1a3a22 100%); border-bottom: 3px solid var(--gold); padding: 2.5rem 1.5rem 2rem; text-align: center; }
+  .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 0.75rem; }
+  .header h1 { font-size: 2.6rem; font-weight: 600; color: var(--gold); letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  .header p { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; color: #6b7c6e; text-transform: uppercase; }
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .updated { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; text-align: right; margin-bottom: 1.5rem; }
+  .qualifier-note { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--gold-dim); background: #fdfaf0; border: 1px solid #e8d98a; border-radius: 4px; padding: 0.6rem 1rem; margin-bottom: 1.5rem; }
+  h2 { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 0.5rem; }
   .rule { height: 1px; background: var(--border); margin-bottom: 1.25rem; }
-
   table { width: 100%; border-collapse: collapse; margin-bottom: 2.5rem; }
   thead tr { border-bottom: 2px solid var(--border); }
-  th {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0.5rem 0.6rem;
-    text-align: left;
-    font-weight: 400;
-  }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0.6rem; text-align: left; font-weight: 400; }
   td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); color: #1a1a1a; }
   tbody tr:hover { background: var(--row-hover); }
-
   .rank-num { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; width: 28px; }
-
-  .rank-1 td { font-weight: 500; }
-  .rank-1 .rank-num { color: #b8860b; }
-  .rank-2 .rank-num { color: #888; }
-  .rank-3 .rank-num { color: #a0522d; }
-
+  .rank-1 td { font-weight: 500; } .rank-1 .rank-num { color: #b8860b; }
+  .rank-2 .rank-num { color: #888; } .rank-3 .rank-num { color: #a0522d; }
   .player a { color: #1a1a1a; text-decoration: none; font-weight: 500; }
   .player a:hover { text-decoration: underline; color: var(--green); }
-
-  .pts {
-    font-weight: 600;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--green);
-  }
-
+  .pts { font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--green); }
   .zero { color: var(--muted); font-family: 'JetBrains Mono', monospace; }
-
-  /* Tournament cards */
   .tournament-section { margin-bottom: 2.5rem; }
-  .t-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-  }
+  .t-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
   .t-title { font-size: 1rem; font-weight: 600; color: #1a1a1a; }
-  .t-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-  }
-  .t-link {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--green);
-    text-decoration: none;
-    margin-left: auto;
-  }
+  .t-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em; }
+  .t-link { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--green); text-decoration: none; margin-left: auto; }
   .t-link:hover { text-decoration: underline; }
-
   .tournament-card { overflow-x: auto; }
   .tournament-card table { min-width: 480px; margin-bottom: 0; }
-
-  footer {
-    background: var(--ink);
-    border-top: 3px solid var(--gold);
-    text-align: center;
-    padding: 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #6b7c6e;
-  }
+  footer { background: var(--ink); border-top: 3px solid var(--gold); text-align: center; padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: #6b7c6e; }
   footer a { color: var(--gold); text-decoration: none; }
 </style>
 </head>
@@ -171,76 +54,39 @@
 </div>
 
 <div class="container">
+  <div class="updated">Last updated: April 17, 2026 &nbsp;&middot;&nbsp; 4 tournaments played &nbsp;&middot;&nbsp; Regular season complete</div>
 
-  <div class="updated">Last updated: April 10, 2026 &nbsp;&middot;&nbsp; 3 tournaments played</div>
+  <div class="qualifier-note">🏆 cheaven, magnus_jr14, binyamash, and XROL have qualified for the FSF Finale</div>
 
   <h2>All-Time Standings</h2>
   <div class="rule"></div>
 
   <table>
     <thead>
-      <tr>
-        <th>#</th><th>Player</th><th>Events</th>
-        <th>Mar 27</th><th>Apr 3</th><th>Apr 10</th>
-        <th>Total Pts</th>
-      </tr>
+      <tr><th>#</th><th>Player</th><th>Events</th><th>Mar 27</th><th>Apr 3</th><th>Apr 10</th><th>Apr 17</th><th>Total Pts</th></tr>
     </thead>
     <tbody>
-      <tr class="rank-1">
-        <td class="rank-num">1</td>
-        <td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven</a></td>
-        <td>3</td><td>4</td><td>3</td><td>4.5</td><td class="pts">11.5</td>
-      </tr>
-      <tr class="rank-2">
-        <td class="rank-num">2</td>
-        <td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash</a></td>
-        <td>3</td><td>4</td><td>3</td><td>2.5</td><td class="pts">9.5</td>
-      </tr>
-      <tr class="rank-3">
-        <td class="rank-num">3</td>
-        <td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14</a></td>
-        <td>3</td><td>1</td><td>4</td><td>3</td><td class="pts">8</td>
-      </tr>
-      <tr>
-        <td class="rank-num">4</td>
-        <td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td>
-        <td>3</td><td>3</td><td>3</td><td>2</td><td class="pts">8</td>
-      </tr>
-      <tr>
-        <td class="rank-num">5</td>
-        <td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL</a></td>
-        <td>3</td><td>3</td><td>3</td><td>2</td><td class="pts">8</td>
-      </tr>
-      <tr>
-        <td class="rank-num">6</td>
-        <td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td>
-        <td>3</td><td>1</td><td>1</td><td>2</td><td class="pts">4</td>
-      </tr>
-      <tr>
-        <td class="rank-num">7</td>
-        <td class="player"><a href="https://lichess.org/@/sasquatchbgf" target="_blank">sasquatchbgf</a></td>
-        <td>3</td><td>0</td><td>0</td><td>3</td><td class="pts">3</td>
-      </tr>
-      <tr>
-        <td class="rank-num">8</td>
-        <td class="player"><a href="https://lichess.org/@/mi11l0o" target="_blank">mi11l0o</a></td>
-        <td>1</td><td>3</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts">3</td>
-      </tr>
-      <tr>
-        <td class="rank-num">9</td>
-        <td class="player"><a href="https://lichess.org/@/kukapuzzle" target="_blank">kukapuzzle</a></td>
-        <td>1</td><td>2</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts">2</td>
-      </tr>
-      <tr>
-        <td class="rank-num">10</td>
-        <td class="player"><a href="https://lichess.org/@/Noah3200" target="_blank">Noah3200</a></td>
-        <td>1</td><td>0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td>
-      </tr>
-      <tr>
-        <td class="rank-num">11</td>
-        <td class="player"><a href="https://lichess.org/@/IZAKHERES" target="_blank">IZAKHERES</a></td>
-        <td>2</td><td class="zero">&mdash;</td><td>0</td><td>0</td><td class="pts zero">0</td>
-      </tr>
+<tr class="rank-1"><td class="rank-num">1</td><td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven 🏆</a></td><td>4</td><td>4</td><td>3</td><td>4.5</td><td>5</td><td class="pts">16.5</td></tr>
+<tr class="rank-2"><td class="rank-num">2</td><td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14 🏆</a></td><td>4</td><td>1</td><td>4</td><td>3</td><td>4</td><td class="pts">12</td></tr>
+<tr class="rank-3"><td class="rank-num">3</td><td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash 🏆</a></td><td>4</td><td>4</td><td>3</td><td>2.5</td><td>2</td><td class="pts">11.5</td></tr>
+<tr><td class="rank-num">4</td><td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL 🏆</a></td><td>4</td><td>3</td><td>3</td><td>2</td><td>3</td><td class="pts">11</td></tr>
+<tr><td class="rank-num">5</td><td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td><td>4</td><td>3</td><td>3</td><td>2</td><td>3</td><td class="pts">11</td></tr>
+<tr><td class="rank-num">6</td><td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td><td>4</td><td>1</td><td>1</td><td>2</td><td>2</td><td class="pts">6</td></tr>
+<tr><td class="rank-num">7</td><td class="player"><a href="https://lichess.org/@/Bkzgreat" target="_blank">Bkzgreat</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>3</td><td class="pts">3</td></tr>
+<tr><td class="rank-num">8</td><td class="player"><a href="https://lichess.org/@/confuseddreamer" target="_blank">confuseddreamer</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>3</td><td class="pts">3</td></tr>
+<tr><td class="rank-num">9</td><td class="player"><a href="https://lichess.org/@/mi11l0o" target="_blank">mi11l0o</a></td><td>1</td><td>3</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts">3</td></tr>
+<tr><td class="rank-num">10</td><td class="player"><a href="https://lichess.org/@/sasquatchbgf" target="_blank">sasquatchbgf</a></td><td>3</td><td class="zero">0</td><td class="zero">&mdash;</td><td>3</td><td class="zero">0</td><td class="pts">3</td></tr>
+<tr><td class="rank-num">11</td><td class="player"><a href="https://lichess.org/@/Shekini" target="_blank">Shekini</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>2.5</td><td class="pts">2.5</td></tr>
+<tr><td class="rank-num">12</td><td class="player"><a href="https://lichess.org/@/kukapuzzle" target="_blank">kukapuzzle</a></td><td>1</td><td>2</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts">2</td></tr>
+<tr><td class="rank-num">13</td><td class="player"><a href="https://lichess.org/@/CaptainCucumber" target="_blank">CaptainCucumber</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>1.5</td><td class="pts">1.5</td></tr>
+<tr><td class="rank-num">14</td><td class="player"><a href="https://lichess.org/@/WoodenSax" target="_blank">WoodenSax</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>1.5</td><td class="pts">1.5</td></tr>
+<tr><td class="rank-num">15</td><td class="player"><a href="https://lichess.org/@/Amanueleo" target="_blank">Amanueleo</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td>1</td><td class="pts">1</td></tr>
+<tr><td class="rank-num">16</td><td class="player"><a href="https://lichess.org/@/Noah3200" target="_blank">Noah3200</a></td><td>1</td><td class="zero">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td></tr>
+<tr><td class="rank-num">17</td><td class="player"><a href="https://lichess.org/@/Theyla9" target="_blank">Theyla9</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">0</td><td class="pts zero">0</td></tr>
+<tr><td class="rank-num">18</td><td class="player"><a href="https://lichess.org/@/IZAKHERES" target="_blank">IZAKHERES</a></td><td>2</td><td class="zero">&mdash;</td><td class="zero">0</td><td class="zero">0</td><td class="zero">&mdash;</td><td class="pts zero">0</td></tr>
+<tr><td class="rank-num">19</td><td class="player"><a href="https://lichess.org/@/kidus1001" target="_blank">kidus1001</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">0</td><td class="pts zero">0</td></tr>
+<tr><td class="rank-num">20</td><td class="player"><a href="https://lichess.org/@/abuniiii" target="_blank">abuniiii</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">0</td><td class="pts zero">0</td></tr>
+<tr><td class="rank-num">21</td><td class="player"><a href="https://lichess.org/@/Zuniverse" target="_blank">Zuniverse</a></td><td>1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">0</td><td class="pts zero">0</td></tr>
     </tbody>
   </table>
 
@@ -256,35 +102,25 @@
         <thead><tr><th>#</th><th>Player</th><th>Rating</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>Pts</th><th>TB</th></tr></thead>
         <tbody>
           <tr class="rank-1"><td class="rank-num">1</td><td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven</a></td><td>1970?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">4</td><td>11</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">4</td><td>11</td></tr>
           <tr class="rank-2"><td class="rank-num">2</td><td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash</a></td><td>1404?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">4</td><td>7</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">4</td><td>7</td></tr>
           <tr class="rank-3"><td class="rank-num">3</td><td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td><td>1623?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">3</td><td>6.5</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">3</td><td>6.5</td></tr>
           <tr><td class="rank-num">4</td><td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL</a></td><td>1767?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">3</td><td>4</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">3</td><td>4</td></tr>
           <tr><td class="rank-num">5</td><td class="player"><a href="https://lichess.org/@/mi11l0o" target="_blank">mi11l0o</a></td><td>1610?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">3</td><td>4</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">3</td><td>4</td></tr>
           <tr><td class="rank-num">6</td><td class="player"><a href="https://lichess.org/@/kukapuzzle" target="_blank">kukapuzzle</a></td><td>1842?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td>
-            <td class="pts">2</td><td>3</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts">2</td><td>3</td></tr>
           <tr><td class="rank-num">7</td><td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td><td>1226?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td>
-            <td class="pts">1</td><td>1</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td class="pts">1</td><td>1</td></tr>
           <tr><td class="rank-num">8</td><td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14</a></td><td>1334?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td class="zero">&mdash;</td>
-            <td class="pts">1</td><td>1</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="pts">1</td><td>1</td></tr>
           <tr><td class="rank-num">9</td><td class="player"><a href="https://lichess.org/@/Noah3200" target="_blank">Noah3200</a></td><td>1500?</td>
-            <td style="color:var(--loss)">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td>
-            <td class="pts zero">0</td><td>0</td></tr>
+            <td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td><td>0</td></tr>
           <tr><td class="rank-num">10</td><td class="player"><a href="https://lichess.org/@/sasquatchbgf" target="_blank">sasquatchbgf</a></td><td>1358?</td>
-            <td style="color:var(--loss)">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td>
-            <td class="pts zero">0</td><td>0</td></tr>
+            <td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td><td>0</td></tr>
         </tbody>
       </table>
     </div>
@@ -302,26 +138,19 @@
         <thead><tr><th>#</th><th>Player</th><th>Rating</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>Pts</th><th>TB</th></tr></thead>
         <tbody>
           <tr class="rank-1"><td class="rank-num">1</td><td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14</a></td><td>1615?</td>
-            <td style="color:var(--bye);font-weight:500">bye</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">4</td><td>11</td></tr>
+            <td style="color:#2a4a6a;font-weight:500">bye</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">4</td><td>11</td></tr>
           <tr class="rank-2"><td class="rank-num">2</td><td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td><td>1620?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td>
-            <td class="pts">3</td><td>8</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td class="pts">3</td><td>8</td></tr>
           <tr class="rank-3"><td class="rank-num">3</td><td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash</a></td><td>1484?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">3</td><td>7</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">3</td><td>7</td></tr>
           <tr><td class="rank-num">4</td><td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL</a></td><td>1595?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">3</td><td>4</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">3</td><td>4</td></tr>
           <tr><td class="rank-num">5</td><td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven</a></td><td>1861?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">3</td><td>4</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">3</td><td>4</td></tr>
           <tr><td class="rank-num">6</td><td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td><td>1172?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td>
-            <td class="pts">1</td><td>1.5</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td class="pts">1</td><td>1.5</td></tr>
           <tr><td class="rank-num">7</td><td class="player"><a href="https://lichess.org/@/IZAKHERES" target="_blank">IZAKHERES</a></td><td>1500?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td>
-            <td class="pts zero">0</td><td>0</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td><td>0</td></tr>
         </tbody>
       </table>
     </div>
@@ -339,29 +168,54 @@
         <thead><tr><th>#</th><th>Player</th><th>Rating</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>Pts</th><th>TB</th></tr></thead>
         <tbody>
           <tr class="rank-1"><td class="rank-num">1</td><td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven</a></td><td>1879?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--draw);font-weight:500">&frac12;</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">4.5</td><td>11.25</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#7a6200;font-weight:500">&frac12;</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">4.5</td><td>11.25</td></tr>
           <tr class="rank-2"><td class="rank-num">2</td><td class="player"><a href="https://lichess.org/@/sasquatchbgf" target="_blank">sasquatchbgf</a></td><td>1591?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">3</td><td>7</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">3</td><td>7</td></tr>
           <tr class="rank-3"><td class="rank-num">3</td><td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14</a></td><td>1656?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">3</td><td>4.5</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">3</td><td>4.5</td></tr>
           <tr><td class="rank-num">4</td><td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash</a></td><td>1569?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--draw);font-weight:500">&frac12;</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td class="zero">&mdash;</td>
-            <td class="pts">2.5</td><td>6.25</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#7a6200;font-weight:500">&frac12;</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="pts">2.5</td><td>6.25</td></tr>
           <tr><td class="rank-num">5</td><td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL</a></td><td>1460?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">2</td><td>4.5</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">2</td><td>4.5</td></tr>
           <tr><td class="rank-num">6</td><td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td><td>1267?</td>
-            <td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td>
-            <td class="pts">2</td><td>3.5</td></tr>
+            <td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td class="pts">2</td><td>3.5</td></tr>
           <tr><td class="rank-num">7</td><td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td><td>1554?</td>
-            <td style="color:var(--loss)">0</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td><td style="color:var(--loss)">0</td><td style="color:var(--win);font-weight:500">1</td>
-            <td class="pts">2</td><td>3</td></tr>
+            <td style="color:#8b1a1a">0</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td style="color:#8b1a1a">0</td><td style="color:#1a5c2a;font-weight:500">1</td><td class="pts">2</td><td>3</td></tr>
           <tr><td class="rank-num">8</td><td class="player"><a href="https://lichess.org/@/IZAKHERES" target="_blank">IZAKHERES</a></td><td>1500?</td>
-            <td style="color:var(--loss)">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td>
-            <td class="pts zero">0</td><td>0</td></tr>
+            <td style="color:#8b1a1a">0</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="zero">&mdash;</td><td class="pts zero">0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FSF #4 -->
+  <div class="tournament-section">
+    <div class="t-header">
+      <span class="t-title">Freestyle Friday #4</span>
+      <span class="t-meta">April 17, 2026 &middot; Chess960 5+2 &middot; 5 Rounds &middot; 17 Players</span>
+      <a class="t-link" href="https://lichess.org/swiss/LXLXrb7x" target="_blank">View on Lichess &uarr;</a>
+    </div>
+    <div class="tournament-card">
+      <table>
+        <thead><tr><th>#</th><th>Player</th><th>Rating</th><th>Pts</th><th>TB</th></tr></thead>
+        <tbody>
+          <tr class="rank-1"><td class="rank-num">1</td><td class="player"><a href="https://lichess.org/@/cheaven" target="_blank">cheaven</a></td><td>1939?</td><td class="pts">5</td><td>13</td></tr>
+          <tr class="rank-2"><td class="rank-num">2</td><td class="player"><a href="https://lichess.org/@/magnus_jr14" target="_blank">magnus_jr14</a></td><td>1634</td><td class="pts">4</td><td>6.5</td></tr>
+          <tr class="rank-3"><td class="rank-num">3</td><td class="player"><a href="https://lichess.org/@/Bkzgreat" target="_blank">Bkzgreat</a></td><td>1632?</td><td class="pts">3</td><td>7</td></tr>
+          <tr><td class="rank-num">4</td><td class="player"><a href="https://lichess.org/@/SidAhu" target="_blank">SidAhu</a></td><td>1579</td><td class="pts">3</td><td>6.5</td></tr>
+          <tr><td class="rank-num">5</td><td class="player"><a href="https://lichess.org/@/confuseddreamer" target="_blank">confuseddreamer</a></td><td>1666?</td><td class="pts">3</td><td>6</td></tr>
+          <tr><td class="rank-num">6</td><td class="player"><a href="https://lichess.org/@/XROL" target="_blank">XROL</a></td><td>1486?</td><td class="pts">3</td><td>6</td></tr>
+          <tr><td class="rank-num">7</td><td class="player"><a href="https://lichess.org/@/Shekini" target="_blank">Shekini</a></td><td>1448?</td><td class="pts">2.5</td><td>3.5</td></tr>
+          <tr><td class="rank-num">8</td><td class="player"><a href="https://lichess.org/@/binyamash" target="_blank">binyamash</a></td><td>1489?</td><td class="pts">2</td><td>2.5</td></tr>
+          <tr><td class="rank-num">9</td><td class="player"><a href="https://lichess.org/@/Fula_710" target="_blank">Fula_710</a></td><td>1313?</td><td class="pts">2</td><td>1</td></tr>
+          <tr><td class="rank-num">10</td><td class="player"><a href="https://lichess.org/@/CaptainCucumber" target="_blank">CaptainCucumber</a></td><td>1354?</td><td class="pts">1.5</td><td>2</td></tr>
+          <tr><td class="rank-num">11</td><td class="player"><a href="https://lichess.org/@/WoodenSax" target="_blank">WoodenSax</a></td><td>1268?</td><td class="pts">1.5</td><td>1</td></tr>
+          <tr><td class="rank-num">12</td><td class="player"><a href="https://lichess.org/@/Amanueleo" target="_blank">Amanueleo</a></td><td>1169?</td><td class="pts">1</td><td>0</td></tr>
+          <tr><td class="rank-num">13</td><td class="player"><a href="https://lichess.org/@/Theyla9" target="_blank">Theyla9</a></td><td>1500?</td><td class="pts zero">0</td><td>0</td></tr>
+          <tr><td class="rank-num">14</td><td class="player"><a href="https://lichess.org/@/sasquatchbgf" target="_blank">sasquatchbgf</a></td><td>1591?</td><td class="pts zero">0</td><td>0</td></tr>
+          <tr><td class="rank-num">15</td><td class="player"><a href="https://lichess.org/@/abuniiii" target="_blank">abuniiii</a></td><td>1500?</td><td class="pts zero">0</td><td>0</td></tr>
+          <tr><td class="rank-num">16</td><td class="player"><a href="https://lichess.org/@/kidus1001" target="_blank">kidus1001</a></td><td>1500?</td><td class="pts zero">0</td><td>0</td></tr>
+          <tr><td class="rank-num">17</td><td class="player"><a href="https://lichess.org/@/Zuniverse" target="_blank">Zuniverse</a></td><td>1586?</td><td class="pts zero">0</td><td>0</td></tr>
         </tbody>
       </table>
     </div>
