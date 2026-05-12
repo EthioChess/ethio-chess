@@ -10,31 +10,36 @@
     font-size: 20px;
     margin: 0 0 16px 0;
   }
+  #ec-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   #ec-table {
     width: 100%;
+    min-width: 500px;
     border-collapse: collapse;
     font-size: 14px;
   }
-  #ec-table thead tr {
-    background-color: #2d6a2d;
-  }
+  #ec-table thead tr { background-color: #2d6a2d; }
   #ec-table thead th {
     color: #fff;
-    padding: 10px 14px;
+    padding: 10px 12px;
     text-align: left;
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
   }
   #ec-table thead th:hover { background-color: #245724; }
-  #ec-table thead th.asc::after  { content: ' ▲'; font-size: 11px; }
-  #ec-table thead th.desc::after { content: ' ▼'; font-size: 11px; }
+  #ec-table thead th.asc::after  { content: ' ▲'; font-size: 10px; }
+  #ec-table thead th.desc::after { content: ' ▼'; font-size: 10px; }
   #ec-table tbody tr:nth-child(even) { background-color: #f4faf4; }
   #ec-table tbody tr:hover { background-color: #dff0df; }
   #ec-table tbody td {
-    padding: 9px 14px;
+    padding: 9px 12px;
     border-bottom: 1px solid #dceadc;
     color: #222;
+    white-space: nowrap;
   }
   .rank-badge {
     display: inline-block;
@@ -49,26 +54,33 @@
   .rank-1 { background: #ffd700; color: #5a4500; }
   .rank-2 { background: #c0c0c0; color: #3a3a3a; }
   .rank-3 { background: #cd7f32; color: #fff; }
+  @media (max-width: 600px) {
+    #ec-table { font-size: 12px; }
+    #ec-table thead th, #ec-table tbody td { padding: 7px 8px; }
+    #ec-wrap h2 { font-size: 17px; }
+  }
 </style>
 
 <div id="ec-wrap">
   <h2>🏆 EthioChess Daily Blitz</h2>
-  <table id="ec-table">
-    <thead>
-      <tr>
-        <th data-col="0" data-type="num">Rank</th>
-        <th data-col="1" data-type="str">Player</th>
-        <th data-col="2" data-type="num">Total Games Played</th>
-        <th data-col="3" data-type="pct">Avg Win Rate</th>
-        <th data-col="4" data-type="num">Avg Opponent</th>
-        <th data-col="5" data-type="num">Avg Performance</th>
-        <th data-col="6" data-type="num">Total Points</th>
-      </tr>
-    </thead>
-    <tbody id="ec-body">
-      <tr><td>1</td><td>DanielB99</td><td>23</td><td>74%</td><td>1875</td><td>2157</td><td>36</td></tr>
-    </tbody>
-  </table>
+  <div id="ec-scroll">
+    <table id="ec-table">
+      <thead>
+        <tr>
+          <th data-col="0" data-type="num">Rank</th>
+          <th data-col="1" data-type="str">Player</th>
+          <th data-col="2" data-type="num">Total Games Played</th>
+          <th data-col="3" data-type="pct">Avg Win Rate</th>
+          <th data-col="4" data-type="num">Avg Opponent</th>
+          <th data-col="5" data-type="num">Avg Performance</th>
+          <th data-col="6" data-type="num">Total Points</th>
+        </tr>
+      </thead>
+      <tbody id="ec-body">
+        <tr><td>1</td><td>DanielB99</td><td>23</td><td>74%</td><td>1875</td><td>2157</td><td>36</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
