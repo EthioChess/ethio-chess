@@ -10,6 +10,43 @@
     font-size: 20px;
     margin: 0 0 16px 0;
   }
+
+  /* --- STAT CARDS --- */
+  #ec-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .ec-card {
+    flex: 1 1 140px;
+    background: #fff;
+    border: 1px solid #c8e6c8;
+    border-top: 4px solid #2d6a2d;
+    border-radius: 6px;
+    padding: 12px 14px;
+    min-width: 120px;
+  }
+  .ec-card .card-label {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .ec-card .card-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2d6a2d;
+  }
+  .ec-card .card-sub {
+    font-size: 11px;
+    color: #888;
+    margin-top: 3px;
+  }
+
+  /* --- BAR CHART --- */
+  /* --- TABLE --- */
   #ec-scroll {
     width: 100%;
     overflow-x: auto;
@@ -45,11 +82,43 @@
     #ec-table { font-size: 12px; }
     #ec-table thead th, #ec-table tbody td { padding: 7px 8px; }
     #ec-wrap h2 { font-size: 17px; }
+    .ec-card .card-value { font-size: 18px; }
   }
 </style>
 
 <div id="ec-wrap">
   <h2>🏆 EthioChess Daily Blitz</h2>
+
+  <!-- STAT CARDS -->
+  <div id="ec-cards">
+    <div class="ec-card">
+      <div class="card-label">Arenas Played</div>
+      <div class="card-value">4</div>
+      <div class="card-sub">Total this season</div>
+    </div>
+    <div class="ec-card">
+      <div class="card-label">Most Arena Wins</div>
+      <div class="card-value">2</div>
+      <div class="card-sub">DanielB99 · Arenas 1 & 2</div>
+    </div>
+    <div class="ec-card">
+      <div class="card-label">Most Points</div>
+      <div class="card-value">23</div>
+      <div class="card-sub">Anbesaw · Arena 4</div>
+    </div>
+    <div class="ec-card">
+      <div class="card-label">Best Win Rate</div>
+      <div class="card-value">92%</div>
+      <div class="card-sub">Anbesaw · Arena 4</div>
+    </div>
+    <div class="ec-card">
+      <div class="card-label">Best Performance</div>
+      <div class="card-value">2230</div>
+      <div class="card-sub">DanielB99 · Arena 1</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
   <div id="ec-scroll">
     <table id="ec-table">
       <thead>
