@@ -1,7 +1,7 @@
 <style>
   #ec-wrap {
     font-family: 'Segoe UI', Arial, sans-serif;
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 16px 0;
   }
@@ -41,19 +41,6 @@
     color: #222;
     white-space: nowrap;
   }
-  .rank-badge {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .rank-1 { background: #ffd700; color: #5a4500; }
-  .rank-2 { background: #c0c0c0; color: #3a3a3a; }
-  .rank-3 { background: #cd7f32; color: #fff; }
   @media (max-width: 600px) {
     #ec-table { font-size: 12px; }
     #ec-table thead th, #ec-table tbody td { padding: 7px 8px; }
@@ -67,18 +54,21 @@
     <table id="ec-table">
       <thead>
         <tr>
-          <th data-col="0" data-type="num">Rank</th>
-          <th data-col="1" data-type="str">Player</th>
-          <th data-col="2" data-type="num">Games Played (Winning Arena)</th>
-          <th data-col="3" data-type="pct">Avg Win Rate</th>
-          <th data-col="4" data-type="num">Avg Opponent</th>
-          <th data-col="5" data-type="num">Avg Performance</th>
-          <th data-col="6" data-type="num">Total Points</th>
+          <th data-col="0" data-type="num">Arena</th>
+          <th data-col="1" data-type="str">Date</th>
+          <th data-col="2" data-type="str">Winner</th>
+          <th data-col="3" data-type="num">Games Played</th>
+          <th data-col="4" data-type="pct">Win Rate</th>
+          <th data-col="5" data-type="num">Avg Opponent</th>
+          <th data-col="6" data-type="num">Performance</th>
+          <th data-col="7" data-type="num">Points</th>
         </tr>
       </thead>
       <tbody id="ec-body">
-        <tr><td>1</td><td><a href="https://lichess.org/@/DanielB99" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">DanielB99</a></td><td>23</td><td>74%</td><td>1875</td><td>2157</td><td>36</td></tr>
-      <tr><td>2</td><td><a href="https://lichess.org/@/cheaven" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">cheaven</a></td><td>9</td><td>67%</td><td>1847</td><td>2070</td><td>13</td></tr>
+        <tr><td>1</td><td>5/11/26</td><td><a href="https://lichess.org/@/DanielB99" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">DanielB99</a></td><td>12</td><td>75%</td><td>1938</td><td>2230</td><td>19</td></tr>
+        <tr><td>2</td><td>5/12/26</td><td><a href="https://lichess.org/@/DanielB99" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">DanielB99</a></td><td>11</td><td>73%</td><td>1811</td><td>2084</td><td>17</td></tr>
+        <tr><td>3</td><td>5/13/26</td><td><a href="https://lichess.org/@/cheaven" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">cheaven</a></td><td>9</td><td>67%</td><td>1847</td><td>2070</td><td>13</td></tr>
+        <tr><td>4</td><td>5/14/26</td><td><a href="https://lichess.org/@/Anbesaw" target="_blank" style="color:#2d6a2d;text-decoration:none;font-weight:600;">Anbesaw</a></td><td>12</td><td>92%</td><td>1706</td><td>2163</td><td>23</td></tr>
       </tbody>
     </table>
   </div>
@@ -106,18 +96,8 @@
       return av < bv ? -sortDir : av > bv ? sortDir : 0;
     });
     rows.forEach(function(r) { tbody.appendChild(r); });
-    updateRankBadges();
     document.querySelectorAll('#ec-table thead th').forEach(function(th, i) {
       th.className = i === col ? (sortDir === 1 ? 'asc' : 'desc') : '';
-    });
-  }
-
-  function updateRankBadges() {
-    document.querySelectorAll('#ec-body tr').forEach(function(row, i) {
-      var cell = row.cells[0];
-      var rank = i + 1;
-      var cls = rank <= 3 ? ' class="rank-badge rank-' + rank + '"' : '';
-      cell.innerHTML = cls ? '<span' + cls + '>' + rank + '</span>' : rank;
     });
   }
 
@@ -126,7 +106,5 @@
       sortTable(parseInt(th.dataset.col), th.dataset.type);
     });
   });
-
-  updateRankBadges();
 })();
 </script>
