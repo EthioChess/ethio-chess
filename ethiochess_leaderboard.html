@@ -10,8 +10,6 @@
     font-size: 20px;
     margin: 0 0 16px 0;
   }
-
-  /* --- STAT CARDS --- */
   #ec-cards {
     display: flex;
     flex-wrap: wrap;
@@ -44,9 +42,19 @@
     color: #888;
     margin-top: 3px;
   }
-
-  /* --- BAR CHART --- */
-  /* --- TABLE --- */
+  .wins-list {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  .wins-list span.name {
+    color: #2d6a2d;
+    font-weight: 700;
+  }
+  .wins-list span.detail {
+    color: #888;
+    font-size: 11px;
+  }
   #ec-scroll {
     width: 100%;
     overflow-x: auto;
@@ -89,36 +97,33 @@
 <div id="ec-wrap">
   <h2>🏆 EthioChess Daily Blitz</h2>
 
-  <!-- STAT CARDS -->
   <div id="ec-cards">
     <div class="ec-card">
       <div class="card-label">Arenas Played</div>
-      <div class="card-value">4</div>
+      <div class="card-value" id="stat-arenas">—</div>
       <div class="card-sub">Total this season</div>
     </div>
-    <div class="ec-card">
-      <div class="card-label">Most Arena Wins</div>
-      <div class="card-value">2</div>
-      <div class="card-sub">DanielB99</div>
+    <div class="ec-card" style="flex:2 1 200px;">
+      <div class="card-label">Arena Wins Leaderboard</div>
+      <div class="wins-list" id="stat-wins">—</div>
     </div>
     <div class="ec-card">
       <div class="card-label">Best Perf Gap</div>
-      <div class="card-value">+457</div>
-      <div class="card-sub">Anbesaw · Arena 4</div>
+      <div class="card-value" id="stat-gap">—</div>
+      <div class="card-sub" id="stat-gap-sub"></div>
     </div>
     <div class="ec-card">
       <div class="card-label">Best Win Rate</div>
-      <div class="card-value">92%</div>
-      <div class="card-sub">Anbesaw · Arena 4</div>
+      <div class="card-value" id="stat-winrate">—</div>
+      <div class="card-sub" id="stat-winrate-sub"></div>
     </div>
     <div class="ec-card">
       <div class="card-label">Best Performance</div>
-      <div class="card-value">2230</div>
-      <div class="card-sub">DanielB99 · Arena 1</div>
+      <div class="card-value" id="stat-perf">—</div>
+      <div class="card-sub" id="stat-perf-sub"></div>
     </div>
   </div>
 
-  <!-- TABLE -->
   <div id="ec-scroll">
     <table id="ec-table">
       <thead>
@@ -145,12 +150,65 @@
 
 <script>
 (function() {
+  var medals = ['🥇','🥈','🥉'];
+
+  function computeStats() {
+    var rows = Array.from(document.querySelectorAll('#ec-body tr'));
+    var playerMap = {};
+    var bestGap = -Infinity, bestGapName = '', bestGapArena = '';
+    var bestWR = -Infinity, bestWRName = '', bestWRArena = '';
+    var bestPerf = -Infinity, bestPerfName = '', bestPerfArena = '';
+
+    rows.forEach(function(row) {
+      var arena  = row.cells[0].textContent.trim();
+      var name   = row.cells[2].textContent.trim();
+      var perf   = parseFloat(row.cells[6].textContent) || 0;
+      var opp    = parseFloat(row.cells[5].textContent) || 0;
+      var wr     = parseFloat(row.cells[4].textContent) || 0;
+      var gap    = perf - opp;
+
+      if (!playerMap[name]) playerMap[name] = { wins: 0, totalGap: 0 };
+      playerMap[name].wins++;
+      playerMap[name].totalGap += gap;
+
+      if (gap > bestGap)   { bestGap = gap;   bestGapName = name;   bestGapArena = 'Arena ' + arena; }
+      if (wr  > bestWR)    { bestWR  = wr;    bestWRName  = name;   bestWRArena  = 'Arena ' + arena; }
+      if (perf > bestPerf) { bestPerf = perf; bestPerfName = name;  bestPerfArena = 'Arena ' + arena; }
+    });
+
+    // Sort players: wins desc, then avg perf gap desc
+    var ranked = Object.keys(playerMap).map(function(name) {
+      return { name: name, wins: playerMap[name].wins, avgGap: playerMap[name].totalGap / playerMap[name].wins };
+    }).sort(function(a, b) {
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      return b.avgGap - a.avgGap;
+    });
+
+    // Arenas played
+    document.getElementById('stat-arenas').textContent = rows.length;
+
+    // Wins leaderboard top 3
+    var winsHtml = ranked.slice(0, 3).map(function(p, i) {
+      return medals[i] + ' <span class="name">' + p.name + '</span> <span class="detail">' +
+        p.wins + (p.wins === 1 ? ' win' : ' wins') + ' · avg gap +' + Math.round(p.avgGap) + '</span>';
+    }).join('<br>');
+    document.getElementById('stat-wins').innerHTML = winsHtml;
+
+    // Other stats
+    document.getElementById('stat-gap').textContent = '+' + Math.round(bestGap);
+    document.getElementById('stat-gap-sub').textContent = bestGapName + ' · ' + bestGapArena;
+    document.getElementById('stat-winrate').textContent = bestWR + '%';
+    document.getElementById('stat-winrate-sub').textContent = bestWRName + ' · ' + bestWRArena;
+    document.getElementById('stat-perf').textContent = bestPerf;
+    document.getElementById('stat-perf-sub').textContent = bestPerfName + ' · ' + bestPerfArena;
+  }
+
+  // Sorting
   var sortCol = -1, sortDir = 1;
 
   function getVal(cell, type) {
     var t = cell.textContent.trim();
-    if (type === 'num') return parseFloat(t) || 0;
-    if (type === 'pct') return parseFloat(t) || 0;
+    if (type === 'num' || type === 'pct') return parseFloat(t) || 0;
     return t.toLowerCase();
   }
 
@@ -175,5 +233,7 @@
       sortTable(parseInt(th.dataset.col), th.dataset.type);
     });
   });
+
+  computeStats();
 })();
 </script>
