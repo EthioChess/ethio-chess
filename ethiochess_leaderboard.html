@@ -92,19 +92,31 @@
     #ec-table thead th, #ec-table tbody td { padding: 7px 8px; }
     #ec-wrap h2 { font-size: 17px; }
     .ec-card .card-value { font-size: 18px; }
+    #ec-cards-row {
+      flex-wrap: wrap !important;
+      overflow-x: visible !important;
+    }
+    #ec-cards-row .ec-card {
+      flex: 1 1 calc(50% - 6px) !important;
+      min-width: calc(50% - 6px) !important;
+    }
+    #ec-card-wins {
+      flex: 1 1 100% !important;
+      min-width: 100% !important;
+    }
   }
 </style>
 
 <div id="ec-wrap">
   <h2>🏆 EthioChess Daily Blitz</h2>
 
-  <div style="display:flex;flex-wrap:nowrap;gap:10px;margin-bottom:24px;overflow-x:auto;">
+  <div id="ec-cards-row" style="display:flex;flex-wrap:nowrap;gap:10px;margin-bottom:24px;overflow-x:auto;">
     <div class="ec-card" style="flex:0 0 90px;">
       <div class="card-label">Arenas Played</div>
       <div class="card-value" id="stat-arenas">—</div>
       <div class="card-sub">Total this season</div>
     </div>
-    <div class="ec-card" style="flex:1 1 0;">
+    <div id="ec-card-wins" class="ec-card" style="flex:1 1 0;">
       <div class="card-label">Arena Wins Leaderboard</div>
       <div class="wins-list" id="stat-wins">—</div>
     </div>
