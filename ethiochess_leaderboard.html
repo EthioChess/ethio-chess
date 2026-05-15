@@ -12,18 +12,19 @@
   }
   #ec-cards {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-wrap: nowrap;
+    gap: 10px;
     margin-bottom: 24px;
+    overflow-x: auto;
   }
   .ec-card {
-    flex: 1 1 140px;
+    flex: 1 1 0;
     background: #fff;
     border: 1px solid #c8e6c8;
     border-top: 4px solid #2d6a2d;
     border-radius: 6px;
-    padding: 12px 14px;
-    min-width: 120px;
+    padding: 12px 10px;
+    min-width: 0;
   }
   .ec-card .card-label {
     font-size: 11px;
@@ -98,12 +99,12 @@
   <h2>🏆 EthioChess Daily Blitz</h2>
 
   <div id="ec-cards">
-    <div class="ec-card">
+    <div class="ec-card" style="flex:0 0 90px;">
       <div class="card-label">Arenas Played</div>
       <div class="card-value" id="stat-arenas">—</div>
       <div class="card-sub">Total this season</div>
     </div>
-    <div class="ec-card" style="flex:2 1 200px;">
+    <div class="ec-card" style="flex:2 1 0;">
       <div class="card-label">Arena Wins Leaderboard</div>
       <div class="wins-list" id="stat-wins">—</div>
     </div>
